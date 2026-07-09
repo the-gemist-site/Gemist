@@ -1,0 +1,512 @@
+/* ---------------------------------------------------------
+   The Gemist — bespoke fine jewellery
+   Fixed-viewport gallery layout, matching reference exactly:
+   left nav column / center image / right caption column,
+   all vertically centered, page never scrolls — only the
+   active piece (image + caption) changes.
+--------------------------------------------------------- */
+
+@font-face{
+  font-family: "EB Garamond";
+  src: local("EB Garamond");
+}
+
+:root{
+  --bg: #f9f8f6;
+  --ink: #12354e;
+  --ink-soft: #12354e;
+  --muted: #12354e;
+  --line: #e4e0d6;
+
+  --font: "EB Garamond", "Iowan Old Style", Georgia, serif;
+  --ease: cubic-bezier(.5,0,.15,1);
+  --ease-lux: cubic-bezier(.16,.1,.13,1);
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+html, body{
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+body, h1, h2, h3, p{ margin: 0; }
+
+body{
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--ink);
+  text-transform: lowercase;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img{ max-width: 100%; display: block; }
+a{ color: inherit; text-decoration: none; }
+
+::selection{ background: var(--ink); color: var(--bg); }
+
+::-webkit-scrollbar{ width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb{ background: #706d67; }
+::-webkit-scrollbar-track{ background: var(--bg); }
+
+a:focus-visible, button:focus-visible{
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------
+   Footer note — fixed bottom-left corner, every page
+--------------------------------------------------------- */
+.footer-note{
+  position: fixed;
+  bottom: 24px;
+  left: clamp(24px, 4vw, 64px);
+  right: clamp(24px, 4vw, 64px);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  z-index: 20;
+}
+.footer-note::-webkit-scrollbar{ display: none; }
+.footer-note a{
+  border-bottom: 1px solid currentColor;
+  transition: opacity .2s var(--ease);
+}
+.footer-note a:hover{ opacity: .65; }
+
+/* ---------------------------------------------------------
+   Hero line — fixed top-centre, home/gallery only
+--------------------------------------------------------- */
+.hero-line{
+  position: fixed;
+  top: 48px;
+  left: clamp(24px, 4vw, 64px);
+  right: clamp(24px, 4vw, 64px);
+  text-align: center;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  opacity: 0;
+  transition: opacity 1.1s var(--ease-lux);
+  pointer-events: none;
+  z-index: 5;
+}
+.hero-line.is-active{ opacity: 1; }
+
+/* ---------------------------------------------------------
+   App shell — three columns, vertically centered
+--------------------------------------------------------- */
+.app{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 22.2275fr 55.545fr 22.2275fr;
+  align-items: center;
+}
+
+.col-left{
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: clamp(24px, 3vw, 56px);
+  align-items: baseline;
+  padding-left: clamp(20px, 2.6vw, 40px);
+}
+
+.brand-row{ display: contents; }
+
+.brand{
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  color: var(--ink);
+  transition: opacity .2s var(--ease);
+}
+.brand:hover{ opacity: .65; }
+.brand img{
+  height: 80px;
+  width: auto;
+  display: block;
+}
+
+.menu-toggle{
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: start;
+  align-self: center;
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink);
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: opacity .2s var(--ease);
+}
+.menu-toggle:hover{ opacity: .65; }
+
+.dropdown-nav{
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  margin-top: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  transition: max-height 1.05s var(--ease-lux), opacity .83s var(--ease-lux), margin-top 1.05s var(--ease-lux);
+}
+.dropdown-nav.is-open{
+  margin-top: 22px;
+  max-height: 160px;
+  opacity: 1;
+}
+.nav-link{
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--muted);
+  width: fit-content;
+  transition: color .2s var(--ease);
+}
+.nav-link.is-active{
+  color: var(--ink);
+}
+.nav-link:hover{
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------
+   Center — image
+--------------------------------------------------------- */
+.col-center{
+  grid-column: 2;
+  grid-row: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame{
+  position: relative;
+  width: 100%;
+  height: 68.93vh;
+}
+
+.piece-img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(1.015);
+  transition: opacity 1.3s var(--ease-lux), transform 1.6s var(--ease-lux);
+  pointer-events: none;
+}
+.piece-img.is-active{
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.scroll-hint{
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .6s var(--ease-lux), color .2s var(--ease);
+  pointer-events: none;
+  z-index: 2;
+}
+.scroll-hint.is-visible{
+  opacity: 1;
+  pointer-events: auto;
+}
+.scroll-hint:hover{ color: var(--ink); }
+.scroll-hint svg{
+  width: 22px;
+  height: 22px;
+  animation: scrollHintBounce 4.5s ease-in-out infinite;
+}
+@keyframes scrollHintBounce{
+  0%, 100%{ transform: translateY(0); }
+  50%{ transform: translateY(6px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .scroll-hint svg{ animation: none; }
+}
+
+/* ---------------------------------------------------------
+   Right — caption
+--------------------------------------------------------- */
+.col-right{
+  grid-column: 3;
+  grid-row: 1;
+  position: relative;
+  height: 3.6em;
+}
+
+.caption{
+  position: absolute;
+  inset: 0;
+  padding-right: clamp(20px, 2.6vw, 40px);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 1.1s var(--ease-lux), transform 1.2s var(--ease-lux);
+  pointer-events: none;
+}
+.caption.is-active{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.caption-row{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.caption-title{
+  font-size: 16px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.caption-index{
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.caption-line{
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------
+   About — its own grid item spanning the full width, so the
+   copy can be centred in the page rather than tied to the
+   image/caption columns. Sizes independently of the small
+   caption box and scrolls internally without ever moving
+   the fixed layout.
+--------------------------------------------------------- */
+.about-panel{
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: static;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0;
+}
+.about-panel.is-active{
+  pointer-events: none;
+}
+.about-panel-inner{
+  width: 100%;
+  max-width: 640px;
+  max-height: 74vh;
+  overflow-y: auto;
+  padding: 0 24px;
+  pointer-events: auto;
+}
+.about-panel-inner .caption-row{
+  justify-content: flex-start;
+}
+.about-panel-inner .caption-index{
+  white-space: normal;
+}
+.about-copy{
+  margin-top: 22px;
+}
+.about-copy p{
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+  text-align: justify;
+  text-justify: inter-word;
+}
+.about-copy p:last-of-type{
+  text-align: left;
+}
+.about-copy-meta{
+  font-style: italic;
+  color: var(--muted) !important;
+  margin-bottom: 0 !important;
+}
+
+/* ---------------------------------------------------------
+   Contact — its own grid item spanning the full width, three
+   columns (Contact / Location / Services) centred as a group.
+--------------------------------------------------------- */
+.contact-panel{
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: static;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0;
+}
+.contact-panel.is-active{
+  pointer-events: none;
+}
+.contact-panel-inner{
+  display: flex;
+  justify-content: center;
+  gap: 86px;
+  padding: 0 24px;
+  pointer-events: auto;
+}
+.contact-col{
+  flex: none;
+  text-align: left;
+}
+.contact-heading{
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+.contact-line{
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.contact-line a{
+  color: inherit;
+  border-bottom: 1px solid transparent;
+  transition: opacity .2s var(--ease), border-color .2s var(--ease);
+}
+.contact-line a:hover{
+  opacity: .65;
+  border-color: currentColor;
+}
+
+/* ---------------------------------------------------------
+   Responsive — stack columns, keep the fixed / non-scrolling
+   single-view mechanic; swipe or wheel still changes piece
+--------------------------------------------------------- */
+@media (max-width: 900px){
+  .brand img{
+    height: 64px;
+  }
+
+  .footer-note{
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hero-line{
+    top: 76px;
+    left: 16px;
+    right: 16px;
+    font-size: 14px;
+  }
+
+  .app{
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    align-items: stretch;
+    padding: 20px 20px 100px;
+    row-gap: 14px;
+  }
+
+  .col-left, .col-center, .col-right{ min-width: 0; }
+  .caption-title, .caption-index{ white-space: normal; }
+
+  .col-left{
+    grid-column: 1;
+    grid-row: 1;
+    padding-left: 20px;
+    column-gap: 20px;
+  }
+
+  .col-center{ grid-column: 1; grid-row: 2; padding: 0; min-height: 0; }
+  .frame{ max-height: 59.8vh; aspect-ratio: 4 / 3; }
+
+  .col-right{ grid-column: 1; grid-row: 3; height: auto; min-height: 5.6em; }
+
+  .about-panel{
+    grid-column: 1;
+    grid-row: 4;
+    height: auto;
+    min-width: 0;
+    display: none;
+    opacity: 1;
+    transform: none;
+  }
+  .about-panel.is-active{
+    display: block;
+  }
+  .app:has(.about-panel.is-active) .col-center,
+  .app:has(.about-panel.is-active) .col-right,
+  .app:has(.contact-panel.is-active) .col-center,
+  .app:has(.contact-panel.is-active) .col-right{
+    display: none;
+  }
+  .about-panel-inner{
+    max-width: 100%;
+    max-height: 66vh;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .contact-panel{
+    grid-column: 1;
+    grid-row: 4;
+    height: auto;
+    min-width: 0;
+    display: none;
+  }
+  .contact-panel.is-active{
+    display: block;
+  }
+  .contact-panel-inner{
+    max-width: 100%;
+    flex-direction: column;
+    gap: 32px;
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px){
+  .col-left{ column-gap: 14px; }
+  .caption-title, .caption-index, .caption-line, .brand, .menu-toggle, .nav-link{
+    font-size: 15px;
+  }
+}
