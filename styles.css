@@ -6,11 +6,6 @@
    active piece (image + caption) changes.
 --------------------------------------------------------- */
 
-@font-face{
-  font-family: "EB Garamond";
-  src: local("EB Garamond");
-}
-
 :root{
   --bg: #f9f8f6;
   --ink: #12354e;
@@ -18,7 +13,7 @@
   --muted: #12354e;
   --line: #e4e0d6;
 
-  --font: "EB Garamond", "Iowan Old Style", Georgia, serif;
+  --font: "Jost", "Century Gothic", "Futura", sans-serif;
   --ease: cubic-bezier(.5,0,.15,1);
   --ease-lux: cubic-bezier(.16,.1,.13,1);
 }
