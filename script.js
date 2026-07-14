@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var GALLERY_COUNT = 4;
+  var GALLERY_COUNT = 5;
   var mode = "gallery";
   var galleryIndex = 0;
 

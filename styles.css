@@ -6,6 +6,11 @@
    active piece (image + caption) changes.
 --------------------------------------------------------- */
 
+@font-face{
+  font-family: "EB Garamond";
+  src: local("EB Garamond");
+}
+
 :root{
   --bg: #f9f8f6;
   --ink: #12354e;
@@ -13,7 +18,7 @@
   --muted: #12354e;
   --line: #e4e0d6;
 
-  --font: "Jost", "Century Gothic", "Futura", sans-serif;
+  --font: "EB Garamond", "Iowan Old Style", Georgia, serif;
   --ease: cubic-bezier(.5,0,.15,1);
   --ease-lux: cubic-bezier(.16,.1,.13,1);
 }
@@ -59,11 +64,12 @@ a:focus-visible, button:focus-visible{
   position: fixed;
   bottom: 24px;
   left: clamp(24px, 4vw, 64px);
-  right: clamp(24px, 4vw, 64px);
+  max-width: calc(100vw - 48px);
+  text-align: left;
   font-style: italic;
   font-size: 15px;
   line-height: 1.5;
-  color: var(--muted);
+  color: rgba(18, 53, 78, 0.6);
   white-space: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
@@ -77,11 +83,11 @@ a:focus-visible, button:focus-visible{
 .footer-note a:hover{ opacity: .65; }
 
 /* ---------------------------------------------------------
-   Hero line — fixed top-centre, home/gallery only
+   Hero line — fixed bottom-centre, below the image, home/gallery only
 --------------------------------------------------------- */
 .hero-line{
   position: fixed;
-  top: 48px;
+  bottom: calc((100vh - 68.93vh) / 4);
   left: clamp(24px, 4vw, 64px);
   right: clamp(24px, 4vw, 64px);
   text-align: center;
@@ -361,8 +367,10 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ---------------------------------------------------------
-   Contact — its own grid item spanning the full width, three
-   columns (Contact / Location / Services) centred as a group.
+   Contact — its own grid item spanning the full width. The
+   three columns sit on a strict equal-width grid, starting
+   just right of the logo/menu column (same row, vertically
+   centred to match), so the two never compete for space.
 --------------------------------------------------------- */
 .contact-panel{
   grid-column: 1 / -1;
@@ -371,21 +379,22 @@ a:focus-visible, button:focus-visible{
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   padding-right: 0;
 }
 .contact-panel.is-active{
   pointer-events: none;
 }
 .contact-panel-inner{
-  display: flex;
-  justify-content: center;
-  gap: 86px;
-  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: clamp(48px, 6vw, 96px);
+  margin-left: 22.2275%;
+  max-width: 1180px;
+  padding-right: clamp(20px, 2.6vw, 40px);
   pointer-events: auto;
 }
 .contact-col{
-  flex: none;
+  min-width: 0;
   text-align: left;
 }
 .contact-heading{
@@ -492,8 +501,9 @@ a:focus-visible, button:focus-visible{
     display: block;
   }
   .contact-panel-inner{
+    grid-template-columns: 1fr;
     max-width: 100%;
-    flex-direction: column;
+    margin-left: 0;
     gap: 32px;
     padding: 0;
   }
