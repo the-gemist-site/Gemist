@@ -52,7 +52,9 @@
       link.classList.toggle("is-active", link.dataset.mode === mode);
     });
     heroLine.classList.toggle("is-active", mode === "gallery");
-    scrollHint.classList.toggle("is-visible", mode === "gallery" && galleryIndex < GALLERY_COUNT - 1);
+    var isLast = mode === "gallery" && galleryIndex === GALLERY_COUNT - 1;
+    scrollHint.classList.toggle("is-visible", mode === "gallery" && (galleryIndex < GALLERY_COUNT - 1 || isLast));
+    scrollHint.classList.toggle("is-reversed", isLast);
   }
 
   function setMode(next) {
@@ -82,7 +84,7 @@
     e.preventDefault();
     if (wheelLock) return;
     wheelLock = true;
-    step(1);
+    step(scrollHint.classList.contains("is-reversed") ? -1 : 1);
     setTimeout(function () { wheelLock = false; }, 1400);
   });
 
