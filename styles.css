@@ -142,7 +142,8 @@ a:focus-visible, button:focus-visible{
 .menu-toggle{
   position: fixed;
   left: 77.7725vw;
-  top: 18.9815vh;
+  top: calc(clamp(20px, 2.6vw, 40px) + 52px);
+  transform: translateY(-50%);
   z-index: 15;
   appearance: none;
   background: none;
@@ -161,7 +162,7 @@ a:focus-visible, button:focus-visible{
 .dropdown-nav{
   position: fixed;
   left: 77.7725vw;
-  top: calc(18.9815vh + 43px);
+  top: calc(clamp(20px, 2.6vw, 40px) + 87px);
   z-index: 15;
   max-height: 0;
   overflow: hidden;
@@ -273,7 +274,10 @@ a:focus-visible, button:focus-visible{
 
 .caption{
   position: absolute;
-  inset: 0 0 auto 0;
+  left: 0;
+  top: 0;
+  width: max-content;
+  max-width: 100%;
   padding-right: clamp(20px, 2.6vw, 40px);
   opacity: 0;
   transform: translateY(8px);
@@ -506,7 +510,7 @@ a:focus-visible, button:focus-visible{
 
   .col-right{ grid-column: 1; grid-row: 3; height: auto; min-height: 5.6em; }
 
-  .col-right .caption{ inset: 0 0 auto 0; }
+  .col-right .caption{ inset: 0 0 auto 0; width: 100%; max-width: 100%; }
   .col-right .caption-row{ display: contents; }
   .col-right .caption-index{
     position: absolute;
@@ -589,6 +593,6 @@ a:focus-visible, button:focus-visible{
   .hero-line{ display: none; }
 
   .menu-toggle[aria-expanded="true"]{
-    transform: translateY(-12px);
+    transform: translateY(calc(-50% - 12px));
   }
 }
