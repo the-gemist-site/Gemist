@@ -62,7 +62,7 @@ a:focus-visible, button:focus-visible{
 --------------------------------------------------------- */
 .footer-note{
   position: fixed;
-  bottom: 24px;
+  bottom: clamp(20px, 2.6vw, 40px);
   left: 77.7725vw;
   right: clamp(20px, 2.6vw, 40px);
   text-align: left;
@@ -70,14 +70,11 @@ a:focus-visible, button:focus-visible{
   font-size: 17px;
   line-height: 1.5;
   color: rgba(18, 53, 78, 0.6);
+  cursor: pointer;
+  transition: opacity .2s var(--ease);
   z-index: 20;
 }
-.footer-note::-webkit-scrollbar{ display: none; }
-.footer-note a{
-  border-bottom: 1px solid currentColor;
-  transition: opacity .2s var(--ease);
-}
-.footer-note a:hover{ opacity: .65; }
+.footer-note:hover{ opacity: .65; }
 
 /* ---------------------------------------------------------
    Hero line — fixed bottom-centre, below the image, home/gallery only
@@ -274,10 +271,7 @@ a:focus-visible, button:focus-visible{
 
 .caption{
   position: absolute;
-  left: 0;
-  top: 0;
-  width: max-content;
-  max-width: 100%;
+  inset: 0;
   padding-right: clamp(20px, 2.6vw, 40px);
   opacity: 0;
   transform: translateY(8px);
@@ -291,7 +285,10 @@ a:focus-visible, button:focus-visible{
 }
 
 .caption-row{
-  display: contents;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
 }
 .caption-title{
   font-size: 20px;
@@ -299,12 +296,8 @@ a:focus-visible, button:focus-visible{
   white-space: nowrap;
 }
 .caption-index{
-  position: absolute;
-  right: 0;
-  bottom: 0;
   font-size: 20px;
   font-style: italic;
-  text-align: right;
   white-space: nowrap;
   color: var(--ink);
 }
@@ -312,6 +305,32 @@ a:focus-visible, button:focus-visible{
   font-size: 20px;
   line-height: 1.35;
   color: var(--ink);
+}
+
+.col-right .caption{
+  left: 0;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  width: max-content;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.col-right .caption-row{
+  display: contents;
+}
+.col-right .caption-title{
+  order: 0;
+}
+.col-right .caption-line{
+  order: 1;
+}
+.col-right .caption-index{
+  order: 2;
+  position: static;
+  text-align: right;
+  margin-top: 8px;
 }
 
 /* ---------------------------------------------------------
@@ -390,9 +409,8 @@ a:focus-visible, button:focus-visible{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: clamp(48px, 6vw, 96px);
-  margin-left: 22.2275%;
+  margin: 0 auto;
   max-width: 1180px;
-  padding-right: clamp(20px, 2.6vw, 40px);
   pointer-events: auto;
 }
 .contact-col{
@@ -439,7 +457,6 @@ a:focus-visible, button:focus-visible{
     white-space: normal;
     overflow-x: visible;
   }
-  .footer-break{ display: none; }
 
   .hero-line{
     top: 20px;
@@ -510,13 +527,15 @@ a:focus-visible, button:focus-visible{
 
   .col-right{ grid-column: 1; grid-row: 3; height: auto; min-height: 5.6em; }
 
-  .col-right .caption{ inset: 0 0 auto 0; width: 100%; max-width: 100%; }
+  .col-right .caption{ inset: 0 0 auto 0; width: 100%; max-width: 100%; display: flex; flex-direction: column; }
   .col-right .caption-row{ display: contents; }
+  .col-right .caption-title{ order: 0; }
+  .col-right .caption-line{ order: 1; }
   .col-right .caption-index{
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    position: static;
+    order: 2;
     text-align: right;
+    margin-top: 8px;
     color: var(--ink);
   }
 

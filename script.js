@@ -5,7 +5,7 @@
   var mode = "gallery";
   var galleryIndex = 0;
 
-  var navLinks = document.querySelectorAll(".nav-link, .brand");
+  var navLinks = document.querySelectorAll(".nav-link, .brand, .footer-note[data-mode]");
   var images = document.querySelectorAll(".piece-img");
   var captions = document.querySelectorAll(".caption");
 
