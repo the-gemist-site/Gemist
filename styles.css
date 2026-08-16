@@ -212,7 +212,7 @@ a:focus-visible, button:focus-visible{
   object-fit: contain;
   opacity: 0;
   transform: scale(1.015);
-  transition: opacity 1.3s var(--ease-lux), transform 1.6s var(--ease-lux);
+  transition: opacity 1s var(--ease-lux), transform 1s var(--ease-lux);
   pointer-events: none;
 }
 .piece-img.is-active{
@@ -276,7 +276,7 @@ a:focus-visible, button:focus-visible{
   padding-right: clamp(20px, 2.6vw, 40px);
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 1.1s var(--ease-lux), transform 1.2s var(--ease-lux);
+  transition: opacity 1s var(--ease-lux), transform 1s var(--ease-lux);
   pointer-events: none;
 }
 .caption.is-active{

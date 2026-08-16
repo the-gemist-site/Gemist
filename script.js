@@ -88,7 +88,7 @@
     if (wheelLock) return;
     wheelLock = true;
     step(1);
-    setTimeout(function () { wheelLock = false; }, 1400);
+    setTimeout(function () { wheelLock = false; }, 800);
   });
 
   scrollHintUp.addEventListener("click", function (e) {
@@ -96,7 +96,7 @@
     if (wheelLock) return;
     wheelLock = true;
     step(-1);
-    setTimeout(function () { wheelLock = false; }, 1400);
+    setTimeout(function () { wheelLock = false; }, 800);
   });
 
   window.addEventListener(
@@ -108,7 +108,7 @@
       e.preventDefault();
       wheelLock = true;
       step(e.deltaY > 0 ? 1 : -1);
-      setTimeout(function () { wheelLock = false; }, 1400);
+      setTimeout(function () { wheelLock = false; }, 800);
     },
     { passive: false }
   );
@@ -131,7 +131,7 @@
       if (wheelLock) return;
       wheelLock = true;
       step(dy > 0 ? 1 : -1);
-      setTimeout(function () { wheelLock = false; }, 1400);
+      setTimeout(function () { wheelLock = false; }, 800);
     },
     { passive: true }
   );
@@ -142,7 +142,7 @@
     if (wheelLock) return;
     wheelLock = true;
     step(e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1);
-    setTimeout(function () { wheelLock = false; }, 1400);
+    setTimeout(function () { wheelLock = false; }, 800);
   });
 
   render();
