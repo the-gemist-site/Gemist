@@ -13,6 +13,7 @@
   var dropdownNav = document.getElementById("dropdownNav");
   var heroLine = document.getElementById("heroLine");
   var scrollHint = document.getElementById("scrollHint");
+  var scrollHintUp = document.getElementById("scrollHintUp");
 
   function closeMenu() {
     dropdownNav.classList.remove("is-open");
@@ -52,9 +53,11 @@
       link.classList.toggle("is-active", link.dataset.mode === mode);
     });
     heroLine.classList.toggle("is-active", mode === "gallery");
-    var isLast = mode === "gallery" && galleryIndex === GALLERY_COUNT - 1;
-    scrollHint.classList.toggle("is-visible", mode === "gallery" && (galleryIndex < GALLERY_COUNT - 1 || isLast));
-    scrollHint.classList.toggle("is-reversed", isLast);
+    var downVisible = mode === "gallery" && galleryIndex < GALLERY_COUNT - 1;
+    var upVisible = mode === "gallery" && galleryIndex > 0;
+    scrollHint.classList.toggle("is-visible", downVisible);
+    scrollHintUp.classList.toggle("is-visible", upVisible);
+    scrollHintUp.classList.toggle("is-solo", upVisible && !downVisible);
   }
 
   function setMode(next) {
@@ -84,7 +87,15 @@
     e.preventDefault();
     if (wheelLock) return;
     wheelLock = true;
-    step(scrollHint.classList.contains("is-reversed") ? -1 : 1);
+    step(1);
+    setTimeout(function () { wheelLock = false; }, 1400);
+  });
+
+  scrollHintUp.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (wheelLock) return;
+    wheelLock = true;
+    step(-1);
     setTimeout(function () { wheelLock = false; }, 1400);
   });
 

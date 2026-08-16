@@ -244,7 +244,8 @@ a:focus-visible, button:focus-visible{
   opacity: 1;
   pointer-events: auto;
 }
-.scroll-hint.is-reversed{ transform: rotate(180deg); }
+.scroll-hint-up{ bottom: 56px; }
+.scroll-hint-up.is-solo{ bottom: 16px; }
 .scroll-hint:hover{ color: var(--ink); }
 .scroll-hint svg{
   width: 22px;
