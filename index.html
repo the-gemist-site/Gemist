@@ -27,6 +27,7 @@
     </div>
     <nav class="dropdown-nav" id="dropdownNav" aria-label="Primary">
       <a href="#" class="nav-link is-active" data-mode="gallery">Process</a>
+      <a href="#" class="nav-link" data-mode="pieces">Gallery</a>
       <a href="#" class="nav-link" data-mode="about">About</a>
       <a href="#" class="nav-link" data-mode="contact">Contact</a>
     </nav>
@@ -39,6 +40,11 @@
       <img class="piece-img" data-i="2" data-mode="gallery" src="images/process-3.jpeg" alt="A charcoal pencil resting amid its own scattered dust and shavings, a design sketch taking shape">
       <img class="piece-img" data-i="3" data-mode="gallery" src="images/process-4.jpeg" alt="Wax and metal ring components in progress, from cast setting to finished band">
       <img class="piece-img" data-i="4" data-mode="gallery" src="images/process-5.jpeg" alt="A pink sapphire and diamond bracelet resting on crumpled paper, the finished piece">
+      <img class="piece-img" data-i="0" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-1.jpg" alt="Emerald-cut sapphire ring with tapered baguette diamonds in platinum">
+      <img class="piece-img" data-i="1" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-2.jpg" alt="Detail of the sapphire's table and diamond baguette setting">
+      <img class="piece-img" data-i="2" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-3.jpg" alt="Detail of the sapphire's pavilion and gallery setting">
+      <img class="piece-img" data-i="3" data-piece="1" data-mode="pieces" src="images/gallery/piece-02-1.jpg" alt="Three-stone round brilliant diamond ring in yellow gold">
+      <img class="piece-img" data-i="4" data-piece="2" data-mode="pieces" src="images/gallery/piece-03-1.jpg" alt="Oval ruby ring with tapered baguette diamond accents in platinum">
       <button type="button" class="scroll-hint scroll-hint-up" id="scrollHintUp" aria-label="Show previous piece">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 15 L12 8 L20 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -49,6 +55,17 @@
           <path d="M4 9 L12 16 L20 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
+      <button type="button" class="scroll-hint-h scroll-hint-left" id="hintLeft" aria-label="Show previous image">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 4 L8 12 L15 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button type="button" class="scroll-hint-h scroll-hint-right" id="hintRight" aria-label="Show next image">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 4 L16 12 L9 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="frame-dots" id="frameDots" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -88,6 +105,41 @@
       </div>
       <p class="caption-line">The finished jewel is presented: an extension of the body</p>
     </div>
+    <div class="caption" data-i="0" data-piece="0" data-mode="pieces">
+      <div class="caption-row">
+        <p class="caption-title">Sapphire Ring</p>
+        <p class="caption-index">No. 01 of 03</p>
+      </div>
+      <p class="caption-line">2.52ct emerald-cut sapphire, tapered baguette diamonds, platinum</p>
+    </div>
+    <div class="caption" data-i="1" data-piece="0" data-mode="pieces">
+      <div class="caption-row">
+        <p class="caption-title">Sapphire Ring</p>
+        <p class="caption-index">No. 01 of 03</p>
+      </div>
+      <p class="caption-line">Detail of the baguette diamond setting</p>
+    </div>
+    <div class="caption" data-i="2" data-piece="0" data-mode="pieces">
+      <div class="caption-row">
+        <p class="caption-title">Sapphire Ring</p>
+        <p class="caption-index">No. 01 of 03</p>
+      </div>
+      <p class="caption-line">Detail of the sapphire and gallery</p>
+    </div>
+    <div class="caption" data-i="3" data-piece="1" data-mode="pieces">
+      <div class="caption-row">
+        <p class="caption-title">Diamond Ring</p>
+        <p class="caption-index">No. 02 of 03</p>
+      </div>
+      <p class="caption-line">Three-stone round brilliant diamonds, 18k yellow gold</p>
+    </div>
+    <div class="caption" data-i="4" data-piece="2" data-mode="pieces">
+      <div class="caption-row">
+        <p class="caption-title">Ruby Ring</p>
+        <p class="caption-index">No. 03 of 03</p>
+      </div>
+      <p class="caption-line">Oval ruby with tapered baguette diamond accents, platinum</p>
+    </div>
   </div>
 
   <div class="about-panel caption" data-i="0" data-mode="about">
@@ -110,7 +162,7 @@
     <div class="contact-panel-inner">
       <div class="contact-col">
         <p class="contact-heading">Contact</p>
-        <p class="contact-line"><a href="https://instagram.com/thegemist">Instagram</a></p>
+        <p class="contact-line"><a href="https://www.instagram.com/gemsandmax/">Instagram</a></p>
         <p class="contact-line"><a href="mailto:max@gemsandmax.com">max@gemsandmax.com</a></p>
         <p class="contact-line"><a href="tel:+31644171716">+31 (0)6 44 17 17 16</a></p>
       </div>
