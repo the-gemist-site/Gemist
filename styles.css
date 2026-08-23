@@ -159,7 +159,7 @@ a:focus-visible, button:focus-visible{
 .dropdown-nav{
   position: fixed;
   left: 77.7725vw;
-  top: calc(clamp(20px, 2.6vw, 40px) + 218px);
+  top: calc(clamp(20px, 2.6vw, 40px) + 140px);
   z-index: 15;
   max-height: 0;
   overflow: hidden;
