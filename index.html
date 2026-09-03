@@ -56,27 +56,27 @@
       <img class="piece-img" data-i="2" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-3.jpg" alt="Detail of the sapphire's pavilion and gallery setting">
       <img class="piece-img" data-i="3" data-piece="1" data-mode="pieces" src="images/gallery/piece-02-1.jpg" alt="Three-stone round brilliant diamond ring in yellow gold">
       <img class="piece-img" data-i="4" data-piece="2" data-mode="pieces" src="images/gallery/piece-03-1.jpg" alt="Oval ruby ring with tapered baguette diamond accents in platinum">
-      <button type="button" class="scroll-hint scroll-hint-up" id="scrollHintUp" aria-label="Show previous piece">
+      <button type="button" class="scroll-hint scroll-hint-up" data-role="up" aria-label="Show previous piece">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 15 L12 8 L20 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button type="button" class="scroll-hint" id="scrollHint" aria-label="Show next piece">
+      <button type="button" class="scroll-hint" data-role="down" aria-label="Show next piece">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 9 L12 16 L20 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button type="button" class="scroll-hint-h scroll-hint-left" id="hintLeft" aria-label="Show previous image">
+      <button type="button" class="scroll-hint-h scroll-hint-left" data-role="left" aria-label="Show previous image">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M15 4 L8 12 L15 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button type="button" class="scroll-hint-h scroll-hint-right" id="hintRight" aria-label="Show next image">
+      <button type="button" class="scroll-hint-h scroll-hint-right" data-role="right" aria-label="Show next image">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M9 4 L16 12 L9 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <div class="frame-dots" id="frameDots" aria-hidden="true"></div>
+      <div class="frame-dots" data-role="dots" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -151,6 +151,32 @@
       </div>
       <p class="caption-line">Oval ruby with tapered baguette diamond accents, platinum</p>
     </div>
+  </div>
+
+  <div class="mobile-nav-block" id="mobileNavBlock" aria-hidden="true">
+    <div class="mobile-nav-row">
+      <button type="button" class="scroll-hint-h scroll-hint-left" data-role="left" aria-label="Show previous image">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 4 L8 12 L15 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button type="button" class="scroll-hint scroll-hint-up" data-role="up" aria-label="Show previous piece">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 15 L12 8 L20 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button type="button" class="scroll-hint" data-role="down" aria-label="Show next piece">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 9 L12 16 L20 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button type="button" class="scroll-hint-h scroll-hint-right" data-role="right" aria-label="Show next image">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 4 L16 12 L9 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="frame-dots" data-role="dots" aria-hidden="true"></div>
   </div>
 
   <div class="about-panel caption" data-i="0" data-mode="about">

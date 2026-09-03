@@ -312,6 +312,8 @@ a:focus-visible, button:focus-visible{
 }
 .frame-dots .dot.is-active{ opacity: 1; }
 
+.mobile-nav-block{ display: none; }
+
 /* ---------------------------------------------------------
    Right — caption
 --------------------------------------------------------- */
@@ -495,7 +497,7 @@ a:focus-visible, button:focus-visible{
    Responsive — stack columns, keep the fixed / non-scrolling
    single-view mechanic; swipe or wheel still changes piece
 --------------------------------------------------------- */
-@media (max-width: 900px){
+@media (max-width: 1180px){
   .brand img{
     height: 90px;
   }
@@ -513,17 +515,20 @@ a:focus-visible, button:focus-visible{
 
   .hero-line{
     top: 10px;
+    bottom: auto;
     left: 16px;
     right: 16px;
+    text-align: center;
     font-size: 14px;
   }
 
   .app{
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto auto;
     align-items: stretch;
+    align-content: start;
     padding: 40px 16px 60px;
-    row-gap: 14px;
+    row-gap: 34px;
   }
 
   .col-left, .col-center, .col-right{ min-width: 0; }
@@ -577,18 +582,47 @@ a:focus-visible, button:focus-visible{
   }
 
   .col-center{ grid-column: 1; grid-row: 2; padding: 0; min-height: 0; align-items: center; }
-  .frame{ width: 80%; height: auto; max-height: 82vh; aspect-ratio: 4 / 5; margin: 0 auto; }
+  .frame{ width: min(80%, calc(max(100vh - 440px, 200px) * 4 / 5)); height: auto; aspect-ratio: 4 / 5; margin: 0 auto; }
+
+  .frame > .scroll-hint,
+  .frame > .scroll-hint-h,
+  .frame > .frame-dots{
+    display: none;
+  }
+
+  .mobile-nav-block{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .mobile-nav-row{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+  .mobile-nav-block .scroll-hint,
+  .mobile-nav-block .scroll-hint-h{
+    position: static;
+  }
+  .mobile-nav-block .frame-dots{
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
+  }
 
   .col-right{ grid-column: 1; grid-row: 3; height: auto; min-height: 5.6em; }
 
-  .col-right .caption{ inset: 0 0 auto 0; width: 100%; max-width: 100%; display: flex; flex-direction: column; }
+  .col-right .caption{ inset: 0 0 auto 0; width: 100%; max-width: 100%; padding-right: 0; display: flex; flex-direction: column; align-items: center; }
   .col-right .caption-row{ display: contents; }
-  .col-right .caption-title{ order: 0; }
-  .col-right .caption-line{ order: 1; }
+  .col-right .caption-title{ order: 0; text-align: center; }
+  .col-right .caption-line{ order: 1; text-align: center; }
   .col-right .caption-index{
     position: static;
     order: 2;
-    text-align: right;
+    text-align: center;
     margin-top: 8px;
     color: var(--ink);
   }
@@ -607,8 +641,10 @@ a:focus-visible, button:focus-visible{
   }
   .app:has(.about-panel.is-active) .col-center,
   .app:has(.about-panel.is-active) .col-right,
+  .app:has(.about-panel.is-active) .mobile-nav-block,
   .app:has(.contact-panel.is-active) .col-center,
-  .app:has(.contact-panel.is-active) .col-right{
+  .app:has(.contact-panel.is-active) .col-right,
+  .app:has(.contact-panel.is-active) .mobile-nav-block{
     display: none;
   }
   .app:has(.about-panel.is-active),
@@ -617,7 +653,7 @@ a:focus-visible, button:focus-visible{
   }
   .about-panel-inner{
     max-width: calc(100% + 10px);
-    max-height: 66vh;
+    max-height: max(calc(100vh - 310px), 200px);
     width: calc(100% + 10px);
     margin: 0 auto;
     padding: 0 10px 0 0;
@@ -630,6 +666,7 @@ a:focus-visible, button:focus-visible{
   }
   .about-copy p{
     font-size: 16px;
+    text-align: left;
   }
 
   .contact-panel{
@@ -662,7 +699,7 @@ a:focus-visible, button:focus-visible{
   }
 }
 
-@media (min-width: 901px){
+@media (min-width: 1181px){
   .hero-line{ display: none; }
 
   .menu-toggle[aria-expanded="true"]{

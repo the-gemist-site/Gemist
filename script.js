@@ -13,11 +13,11 @@
   var menuToggle = document.getElementById("menuToggle");
   var dropdownNav = document.getElementById("dropdownNav");
   var heroLine = document.getElementById("heroLine");
-  var scrollHint = document.getElementById("scrollHint");
-  var scrollHintUp = document.getElementById("scrollHintUp");
-  var hintLeft = document.getElementById("hintLeft");
-  var hintRight = document.getElementById("hintRight");
-  var frameDots = document.getElementById("frameDots");
+  var downBtns = document.querySelectorAll('[data-role="down"]');
+  var upBtns = document.querySelectorAll('[data-role="up"]');
+  var leftBtns = document.querySelectorAll('[data-role="left"]');
+  var rightBtns = document.querySelectorAll('[data-role="right"]');
+  var dotWraps = document.querySelectorAll('[data-role="dots"]');
 
   // Build piece boundary metadata from the "pieces" mode images in the DOM.
   // Each piece's images are listed contiguously and share a data-piece index.
@@ -38,23 +38,26 @@
     return end - pieceStart[p];
   }
 
-  var dotEls = [];
+  var dotEls = []; // one array of <span> dots per dots-wrap element
   function renderDots(p, detailIndex) {
     var count = pieceImageCount(p);
-    if (count !== dotEls.length) {
-      frameDots.innerHTML = "";
-      dotEls = [];
-      for (var d = 0; d < count; d++) {
-        var dot = document.createElement("span");
-        dot.className = "dot";
-        frameDots.appendChild(dot);
-        dotEls.push(dot);
+    dotWraps.forEach(function (wrap, wi) {
+      if (!dotEls[wi] || dotEls[wi].length !== count) {
+        wrap.innerHTML = "";
+        var els = [];
+        for (var d = 0; d < count; d++) {
+          var dot = document.createElement("span");
+          dot.className = "dot";
+          wrap.appendChild(dot);
+          els.push(dot);
+        }
+        dotEls[wi] = els;
       }
-    }
-    dotEls.forEach(function (dot, d) {
-      dot.classList.toggle("is-active", d === detailIndex);
+      dotEls[wi].forEach(function (dot, d) {
+        dot.classList.toggle("is-active", d === detailIndex);
+      });
+      wrap.classList.toggle("is-visible", count > 1);
     });
-    frameDots.classList.toggle("is-visible", count > 1);
   }
 
   function closeMenu() {
@@ -106,8 +109,8 @@
       downVisible = curPiece < PIECE_COUNT - 1;
       upVisible = curPiece > 0;
     }
-    scrollHint.classList.toggle("is-visible", downVisible);
-    scrollHintUp.classList.toggle("is-visible", upVisible);
+    downBtns.forEach(function (b) { b.classList.toggle("is-visible", downVisible); });
+    upBtns.forEach(function (b) { b.classList.toggle("is-visible", upVisible); });
 
     var leftVisible = false;
     var rightVisible = false;
@@ -120,10 +123,10 @@
       rightVisible = detailIndex < count - 1;
       renderDots(piece, detailIndex);
     } else {
-      frameDots.classList.remove("is-visible");
+      dotWraps.forEach(function (wrap) { wrap.classList.remove("is-visible"); });
     }
-    hintLeft.classList.toggle("is-visible", leftVisible);
-    hintRight.classList.toggle("is-visible", rightVisible);
+    leftBtns.forEach(function (b) { b.classList.toggle("is-visible", leftVisible); });
+    rightBtns.forEach(function (b) { b.classList.toggle("is-visible", rightVisible); });
   }
 
   function setMode(next) {
@@ -168,37 +171,21 @@
     }
   }
 
-  scrollHint.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (wheelLock) return;
-    wheelLock = true;
-    step("v", 1);
-    setTimeout(function () { wheelLock = false; }, 800);
-  });
-
-  scrollHintUp.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (wheelLock) return;
-    wheelLock = true;
-    step("v", -1);
-    setTimeout(function () { wheelLock = false; }, 800);
-  });
-
-  hintRight.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (wheelLock) return;
-    wheelLock = true;
-    step("h", 1);
-    setTimeout(function () { wheelLock = false; }, 800);
-  });
-
-  hintLeft.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (wheelLock) return;
-    wheelLock = true;
-    step("h", -1);
-    setTimeout(function () { wheelLock = false; }, 800);
-  });
+  function bindStep(btns, axis, dir) {
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (wheelLock) return;
+        wheelLock = true;
+        step(axis, dir);
+        setTimeout(function () { wheelLock = false; }, 800);
+      });
+    });
+  }
+  bindStep(downBtns, "v", 1);
+  bindStep(upBtns, "v", -1);
+  bindStep(rightBtns, "h", 1);
+  bindStep(leftBtns, "h", -1);
 
   window.addEventListener(
     "wheel",
