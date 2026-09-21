@@ -446,6 +446,16 @@ body:has(.landing-panel.is-active) .footer-note{
   max-width: 100%;
 }
 
+.landing-top{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: clamp(28px, 4vh, 48px) 24px clamp(40px, 6vh, 72px);
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to bottom, rgba(23, 19, 15, .85) 0%, rgba(23, 19, 15, .45) 45%, rgba(23, 19, 15, 0) 100%);
+}
 .landing-mark{
   width: 72px;
   height: auto;
@@ -821,6 +831,9 @@ body:has(.landing-panel.is-active) .footer-note{
   .landing-hero{
     padding: 40px 24px clamp(28px, 8vh, 48px);
     gap: 10px;
+  }
+  .landing-top{
+    padding: 20px 24px 32px;
   }
   .gem-hotspot{
     width: 38px;
