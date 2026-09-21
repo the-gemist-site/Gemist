@@ -424,6 +424,13 @@ body:has(.landing-panel.is-active) .footer-note{
   pointer-events: auto;
 }
 
+/* The photo is deliberately sized smaller than the viewport — with
+   room reserved above for the logo and below for the tagline/CTA —
+   so it always sits inside a solid black mat instead of overlapping
+   the logo or text along its own edges. Centering happens via flex
+   + padding (not transform) so it correctly respects the top/bottom
+   reserve being different sizes, rather than centering symmetrically
+   on the full viewport regardless of how much space each end needs. */
 .landing-stage{
   position: relative;
   height: 100vh;
@@ -431,6 +438,7 @@ body:has(.landing-panel.is-active) .footer-note{
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: clamp(155px, 22vh, 205px) clamp(24px, 6vw, 100px) clamp(215px, 32vh, 295px);
   pointer-events: none;
 }
 
@@ -442,9 +450,9 @@ body:has(.landing-panel.is-active) .footer-note{
   display: block;
   width: auto;
   height: auto;
-  max-width: 100vw;
-  max-height: 100vh;
-  max-height: 100dvh;
+  max-width: calc(100vw - 2 * clamp(24px, 6vw, 100px));
+  max-height: calc(100vh - clamp(155px, 22vh, 205px) - clamp(215px, 32vh, 295px));
+  max-height: calc(100dvh - clamp(155px, 22vh, 205px) - clamp(215px, 32vh, 295px));
 }
 
 .landing-top{
@@ -458,8 +466,10 @@ body:has(.landing-panel.is-active) .footer-note{
   background: linear-gradient(to bottom, rgba(23, 19, 15, .85) 0%, rgba(23, 19, 15, .45) 45%, rgba(23, 19, 15, 0) 100%);
 }
 .landing-mark{
-  width: 72px;
+  width: 96px;
   height: auto;
+  opacity: .95;
+  filter: brightness(0) invert(1);
 }
 
 .gem-hotspot{
@@ -836,7 +846,7 @@ body:has(.landing-panel.is-active) .footer-note{
     height: 38px;
   }
   .landing-mark{
-    width: 56px;
+    width: 84px;
   }
   .about-panel-inner{
     max-width: calc(100% + 10px);
