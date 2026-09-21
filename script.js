@@ -90,23 +90,37 @@
   // story; touch devices tap to toggle it instead.
   // ---------------------------------------------------------
   var gemHotspots = document.querySelectorAll(".gem-hotspot");
-  var landingInfoTitle = document.getElementById("landingInfoTitle");
-  var landingInfoLine = document.getElementById("landingInfoLine");
-  var landingDefaultTitle = landingInfoTitle ? landingInfoTitle.textContent : "";
-  var landingDefaultLine = landingInfoLine ? landingInfoLine.textContent : "";
+  var landingTooltip = document.getElementById("landingTooltip");
+  var landingTooltipTitle = document.getElementById("landingTooltipTitle");
+  var landingTooltipLine = document.getElementById("landingTooltipLine");
   var canHoverGems = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
+  function positionTooltip(btn) {
+    if (!landingTooltip) return;
+    var rect = btn.getBoundingClientRect();
+    var gap = 14;
+    var tw = landingTooltip.offsetWidth;
+    var th = landingTooltip.offsetHeight;
+    var left = rect.left + rect.width / 2 - tw / 2;
+    left = Math.max(16, Math.min(left, window.innerWidth - tw - 16));
+    var top = rect.top - th - gap;
+    if (top < 16) top = rect.bottom + gap;
+    landingTooltip.style.left = left + "px";
+    landingTooltip.style.top = top + "px";
+  }
+
   function showGem(btn) {
-    if (!landingInfoTitle || !landingInfoLine) return;
-    landingInfoTitle.textContent = btn.dataset.title;
-    landingInfoLine.textContent = btn.dataset.text;
+    if (!landingTooltip) return;
+    landingTooltipTitle.textContent = btn.dataset.title;
+    landingTooltipLine.textContent = btn.dataset.text;
+    landingTooltip.classList.add("is-visible");
+    positionTooltip(btn);
     gemHotspots.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
   }
 
   function resetGemInfo() {
-    if (!landingInfoTitle || !landingInfoLine) return;
-    landingInfoTitle.textContent = landingDefaultTitle;
-    landingInfoLine.textContent = landingDefaultLine;
+    if (!landingTooltip) return;
+    landingTooltip.classList.remove("is-visible");
     gemHotspots.forEach(function (b) { b.classList.remove("is-active"); });
   }
 

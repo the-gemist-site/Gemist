@@ -389,23 +389,57 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ---------------------------------------------------------
-   Landing — entry splash, its own grid item spanning the full
-   width like about/contact. Shows the sourcing photo with
-   hoverable gem hotspots and a passage into the main site.
+   Landing — full-bleed entry splash. Floats above the rest of
+   the app as a fixed, opaque overlay (not a grid item like the
+   other panels) so it reads as a threshold to cross rather than
+   another slide in the shared gallery layout. The persistent
+   brand/menu corner stays fixed above it at every breakpoint.
 --------------------------------------------------------- */
 .landing-panel{
-  grid-column: 1 / -1;
-  grid-row: 1;
-  position: relative;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
   padding-right: 0;
+  /* Faster than the shared .caption fade: this panel is opaque and
+     covers the whole screen, so lingering mid-fade would veil
+     whatever page is arriving underneath it. */
+  transition: opacity .35s var(--ease-lux), transform .35s var(--ease-lux);
 }
 .landing-panel.is-active{
   pointer-events: none;
+  transition: opacity 1s var(--ease-lux), transform 1s var(--ease-lux);
 }
+.landing-panel.is-active .landing-stage,
+.landing-panel.is-active .landing-hero{
+  pointer-events: auto;
+}
+
+.landing-stage{
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.landing-frame{
+  position: relative;
+  display: inline-block;
+  height: 100%;
+}
+.landing-img{
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
 .landing-watermark{
   position: absolute;
   inset: 0;
@@ -413,48 +447,13 @@ a:focus-visible, button:focus-visible{
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: 0;
 }
 .landing-watermark img{
-  width: min(50vw, 620px);
+  width: min(46vw, 560px);
   height: auto;
-  opacity: .07;
-}
-.landing-panel-inner{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
-  max-width: 1180px;
-  width: 100%;
-  padding: 0 24px;
-  pointer-events: none;
-}
-.landing-panel.is-active .landing-panel-inner{
-  pointer-events: auto;
-}
-.landing-main{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(40px, 5vw, 80px);
-  width: 100%;
+  opacity: .06;
 }
 
-.landing-frame{
-  position: relative;
-  display: inline-block;
-  max-width: 46vw;
-  max-height: 68vh;
-  flex: 0 0 auto;
-}
-.landing-img{
-  display: block;
-  max-width: 46vw;
-  max-height: 68vh;
-  width: auto;
-  height: auto;
-}
 .gem-hotspot{
   position: absolute;
   transform: translate(-50%, -50%);
@@ -484,22 +483,61 @@ a:focus-visible, button:focus-visible{
   border-color: var(--ink);
 }
 
-.landing-info{
-  flex: 0 1 320px;
-  min-width: 0;
+.landing-tooltip{
+  position: fixed;
+  z-index: 11;
+  max-width: min(260px, calc(100vw - 32px));
+  padding: 14px 18px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgba(18, 53, 78, .14);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .25s var(--ease-lux), transform .25s var(--ease-lux);
+  pointer-events: none;
 }
-.landing-info-title{
-  font-size: 20px;
+.landing-tooltip.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+.landing-tooltip-title{
+  font-size: 16px;
   color: var(--ink);
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
-.landing-info-line{
-  font-size: 20px;
+.landing-tooltip-line{
+  font-size: 15px;
   line-height: 1.5;
   color: var(--ink-soft);
 }
 
+.landing-hero{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 64px clamp(24px, 4vw, 64px) clamp(40px, 6vh, 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  background: linear-gradient(to top, rgba(249, 248, 246, .92) 0%, rgba(249, 248, 246, .55) 45%, rgba(249, 248, 246, 0) 100%);
+}
+.landing-tagline{
+  font-style: italic;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 560px;
+}
+.landing-hint{
+  font-size: 14px;
+  color: var(--ink-soft);
+  opacity: .75;
+}
 .landing-enter{
+  margin-top: 6px;
   font-style: italic;
   font-size: 17px;
   color: var(--ink-soft);
@@ -769,50 +807,52 @@ a:focus-visible, button:focus-visible{
   .app:has(.about-panel.is-active) .mobile-nav-block,
   .app:has(.contact-panel.is-active) .col-center,
   .app:has(.contact-panel.is-active) .col-right,
-  .app:has(.contact-panel.is-active) .mobile-nav-block,
-  .app:has(.landing-panel.is-active) .col-center,
-  .app:has(.landing-panel.is-active) .col-right,
-  .app:has(.landing-panel.is-active) .mobile-nav-block{
+  .app:has(.contact-panel.is-active) .mobile-nav-block{
     display: none;
   }
   .app:has(.about-panel.is-active),
-  .app:has(.contact-panel.is-active),
-  .app:has(.landing-panel.is-active){
+  .app:has(.contact-panel.is-active){
     grid-template-rows: auto 0px 0px auto;
   }
 
-  .landing-panel{
-    grid-column: 1;
-    grid-row: 4;
-    height: auto;
-    min-width: 0;
-    display: none;
-    opacity: 1;
+  /* Landing is a fixed full-screen overlay at every breakpoint, so it
+     needs no row-hiding — but the brand/menu corner is normally
+     pulled into the mobile header row (position: static) below, and
+     here it must float fixed above the full-bleed photo instead. */
+  .app:has(.landing-panel.is-active) .brand{
+    position: fixed;
+    left: calc(clamp(20px, 2.6vw, 40px) + 30px);
+    top: calc(clamp(20px, 2.6vw, 40px) + 20px);
+    margin: 0;
+    z-index: 15;
+  }
+  .app:has(.landing-panel.is-active) .brand img{
+    height: 64px;
+  }
+  .app:has(.landing-panel.is-active) .menu-toggle{
+    position: fixed;
+    left: auto;
+    right: clamp(20px, 2.6vw, 40px);
+    top: calc(clamp(20px, 2.6vw, 40px) + 30px);
     transform: none;
+    z-index: 15;
   }
-  .landing-panel.is-active{
-    display: block;
+  .app:has(.landing-panel.is-active) .dropdown-nav{
+    position: fixed;
+    left: auto;
+    right: clamp(20px, 2.6vw, 40px);
+    top: calc(clamp(20px, 2.6vw, 40px) + 60px);
+    align-items: flex-end;
+    background: none;
+    z-index: 15;
   }
-  .landing-panel-inner{
-    max-height: max(calc(100vh - 250px), 200px);
-    overflow-y: auto;
-    gap: 22px;
-  }
-  .landing-main{
-    flex-direction: column;
-    gap: 22px;
-  }
+
   .landing-frame, .landing-img{
-    max-width: 84vw;
-    max-height: 40vh;
+    max-width: 92vw;
   }
-  .landing-info{
-    flex: none;
-    width: 100%;
-    text-align: center;
-  }
-  .landing-info-title, .landing-info-line, .landing-enter{
-    font-size: 16px;
+  .landing-hero{
+    padding: 40px 24px clamp(28px, 8vh, 48px);
+    gap: 10px;
   }
   .gem-hotspot{
     width: 38px;
