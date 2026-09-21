@@ -407,8 +407,8 @@ body:has(.landing-panel.is-active) .footer-note{
   z-index: 10;
   background: #17130f;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
   padding-right: 0;
   /* Faster than the shared .caption fade: this panel is opaque and
      covers the whole screen, so lingering mid-fade would veil
@@ -420,56 +420,56 @@ body:has(.landing-panel.is-active) .footer-note{
   transition: opacity 1s var(--ease-lux), transform 1s var(--ease-lux);
 }
 .landing-panel.is-active .landing-stage,
-.landing-panel.is-active .landing-hero{
+.landing-panel.is-active .landing-hero,
+.landing-panel.is-active .landing-top{
   pointer-events: auto;
 }
 
-/* The photo is deliberately sized smaller than the viewport — with
-   room reserved above for the logo and below for the tagline/CTA —
-   so it always sits inside a solid black mat instead of overlapping
-   the logo or text along its own edges. Centering happens via flex
-   + padding (not transform) so it correctly respects the top/bottom
-   reserve being different sizes, rather than centering symmetrically
-   on the full viewport regardless of how much space each end needs. */
+/* Three stacked flex rows — logo / photo / tagline — rather than a
+   full-height photo with fixed-size reserves calculated in vw/vh.
+   The top and bottom rows size themselves to their own content and
+   never shrink below it; the middle row (the photo) takes whatever
+   is left via flex:1 and scales down gracefully as the window gets
+   shorter, instead of being pushed to a hardcoded reserve that could
+   go negative and collapse the photo to nothing on a short window.
+   aspect-ratio keeps the photo's proportions correct at any size. */
+.landing-top{
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: clamp(16px, 2.4vh, 32px) 24px;
+}
+.landing-mark{
+  width: 88px;
+  height: auto;
+  opacity: .95;
+  filter: brightness(0) invert(1);
+}
+
 .landing-stage{
+  flex: 1 1 auto;
+  min-height: 0;
   position: relative;
-  height: 100vh;
-  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(155px, 22vh, 205px) clamp(24px, 6vw, 100px) clamp(215px, 32vh, 295px);
+  padding: 8px clamp(20px, 5vw, 90px);
   pointer-events: none;
 }
 
 .landing-frame{
   position: relative;
-  display: inline-block;
+  aspect-ratio: 1226 / 1532;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
 }
 .landing-img{
   display: block;
-  width: auto;
-  height: auto;
-  max-width: calc(100vw - 2 * clamp(24px, 6vw, 100px));
-  max-height: calc(100vh - clamp(155px, 22vh, 205px) - clamp(215px, 32vh, 295px));
-  max-height: calc(100dvh - clamp(155px, 22vh, 205px) - clamp(215px, 32vh, 295px));
-}
-
-.landing-top{
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  padding: clamp(28px, 4vh, 48px) 24px clamp(40px, 6vh, 72px);
-  display: flex;
-  justify-content: center;
-  background: linear-gradient(to bottom, rgba(23, 19, 15, .85) 0%, rgba(23, 19, 15, .45) 45%, rgba(23, 19, 15, 0) 100%);
-}
-.landing-mark{
-  width: 96px;
-  height: auto;
-  opacity: .95;
-  filter: brightness(0) invert(1);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .gem-hotspot{
@@ -530,17 +530,13 @@ body:has(.landing-panel.is-active) .footer-note{
 }
 
 .landing-hero{
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 64px clamp(24px, 4vw, 64px) clamp(40px, 6vh, 72px);
+  flex: 0 0 auto;
+  padding: clamp(16px, 2.4vh, 28px) clamp(24px, 4vw, 64px) clamp(24px, 4vh, 40px);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 14px;
-  background: linear-gradient(to top, rgba(23, 19, 15, .88) 0%, rgba(23, 19, 15, .5) 45%, rgba(23, 19, 15, 0) 100%);
+  gap: 10px;
 }
 .landing-tagline{
   font-style: italic;
@@ -834,19 +830,9 @@ body:has(.landing-panel.is-active) .footer-note{
     grid-template-rows: auto 0px 0px auto;
   }
 
-  .landing-hero{
-    padding: 40px 24px clamp(28px, 8vh, 48px);
-    gap: 10px;
-  }
-  .landing-top{
-    padding: 20px 24px 32px;
-  }
   .gem-hotspot{
     width: 38px;
     height: 38px;
-  }
-  .landing-mark{
-    width: 84px;
   }
   .about-panel-inner{
     max-width: calc(100% + 10px);
