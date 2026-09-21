@@ -3,10 +3,10 @@
 
   var GALLERY_COUNT = 5;
   var STEPPABLE_MODES = { gallery: true, pieces: true };
-  var mode = "gallery";
+  var mode = "landing";
   var galleryIndex = 0;
 
-  var navLinks = document.querySelectorAll(".nav-link, .brand, .footer-note[data-mode]");
+  var navLinks = document.querySelectorAll(".nav-link, .brand, .footer-note[data-mode], .landing-enter");
   var images = document.querySelectorAll(".piece-img");
   var captions = document.querySelectorAll(".caption");
 
@@ -85,6 +85,46 @@
     if (e.key === "Escape") closeMenu();
   });
 
+  // ---------------------------------------------------------
+  // Landing — gem hotspots. Desktop hovers a dot to reveal its
+  // story; touch devices tap to toggle it instead.
+  // ---------------------------------------------------------
+  var gemHotspots = document.querySelectorAll(".gem-hotspot");
+  var landingInfoTitle = document.getElementById("landingInfoTitle");
+  var landingInfoLine = document.getElementById("landingInfoLine");
+  var landingDefaultTitle = landingInfoTitle ? landingInfoTitle.textContent : "";
+  var landingDefaultLine = landingInfoLine ? landingInfoLine.textContent : "";
+  var canHoverGems = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  function showGem(btn) {
+    if (!landingInfoTitle || !landingInfoLine) return;
+    landingInfoTitle.textContent = btn.dataset.title;
+    landingInfoLine.textContent = btn.dataset.text;
+    gemHotspots.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+  }
+
+  function resetGemInfo() {
+    if (!landingInfoTitle || !landingInfoLine) return;
+    landingInfoTitle.textContent = landingDefaultTitle;
+    landingInfoLine.textContent = landingDefaultLine;
+    gemHotspots.forEach(function (b) { b.classList.remove("is-active"); });
+  }
+
+  gemHotspots.forEach(function (btn) {
+    if (canHoverGems) {
+      btn.addEventListener("mouseenter", function () { showGem(btn); });
+      btn.addEventListener("mouseleave", resetGemInfo);
+      btn.addEventListener("focus", function () { showGem(btn); });
+      btn.addEventListener("blur", resetGemInfo);
+    } else {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (btn.classList.contains("is-active")) resetGemInfo();
+        else showGem(btn);
+      });
+    }
+  });
+
   function render() {
     images.forEach(function (img) {
       var match = img.dataset.mode === mode && (!STEPPABLE_MODES[mode] || Number(img.dataset.i) === galleryIndex);
@@ -130,6 +170,7 @@
   }
 
   function setMode(next) {
+    if (next !== "landing") resetGemInfo();
     mode = next;
     if (STEPPABLE_MODES[mode]) galleryIndex = 0;
     render();
