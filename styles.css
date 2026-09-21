@@ -459,8 +459,6 @@ body:has(.landing-panel.is-active) .footer-note{
 .landing-mark{
   width: 72px;
   height: auto;
-  opacity: .92;
-  filter: brightness(0) invert(1);
 }
 
 .gem-hotspot{
