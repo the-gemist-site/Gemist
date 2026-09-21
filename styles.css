@@ -393,13 +393,19 @@ a:focus-visible, button:focus-visible{
    the app as a fixed, opaque overlay (not a grid item like the
    other panels) so it reads as a threshold to cross rather than
    another slide in the shared gallery layout. The persistent
-   brand/menu corner stays fixed above it at every breakpoint.
+   brand/menu corner and the enquiries link are hidden while it's
+   up, so the splash has no shared chrome with the rest of the site.
 --------------------------------------------------------- */
+body:has(.landing-panel.is-active) .col-left,
+body:has(.landing-panel.is-active) .footer-note{
+  display: none;
+}
+
 .landing-panel{
   position: fixed;
   inset: 0;
   z-index: 10;
-  background: var(--bg);
+  background: #050505;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -443,15 +449,18 @@ a:focus-visible, button:focus-visible{
 .landing-watermark{
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
 }
 .landing-watermark img{
-  width: min(46vw, 560px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(88vw, 1300px);
+  max-width: none;
   height: auto;
-  opacity: .06;
+  opacity: .16;
+  filter: brightness(0) invert(1);
 }
 
 .gem-hotspot{
@@ -522,25 +531,26 @@ a:focus-visible, button:focus-visible{
   align-items: center;
   text-align: center;
   gap: 14px;
-  background: linear-gradient(to top, rgba(249, 248, 246, .92) 0%, rgba(249, 248, 246, .55) 45%, rgba(249, 248, 246, 0) 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, .85) 0%, rgba(0, 0, 0, .45) 45%, rgba(0, 0, 0, 0) 100%);
 }
 .landing-tagline{
   font-style: italic;
   font-size: clamp(20px, 2.4vw, 28px);
   line-height: 1.4;
-  color: var(--ink);
+  color: var(--bg);
   max-width: 560px;
 }
 .landing-hint{
   font-size: 14px;
-  color: var(--ink-soft);
-  opacity: .75;
+  color: var(--bg);
+  opacity: .65;
 }
 .landing-enter{
   margin-top: 6px;
   font-style: italic;
   font-size: 17px;
-  color: var(--ink-soft);
+  color: var(--bg);
+  opacity: .85;
   transition: opacity .2s var(--ease);
 }
 .landing-enter:hover{ opacity: .65; }
@@ -813,38 +823,6 @@ a:focus-visible, button:focus-visible{
   .app:has(.about-panel.is-active),
   .app:has(.contact-panel.is-active){
     grid-template-rows: auto 0px 0px auto;
-  }
-
-  /* Landing is a fixed full-screen overlay at every breakpoint, so it
-     needs no row-hiding — but the brand/menu corner is normally
-     pulled into the mobile header row (position: static) below, and
-     here it must float fixed above the full-bleed photo instead. */
-  .app:has(.landing-panel.is-active) .brand{
-    position: fixed;
-    left: calc(clamp(20px, 2.6vw, 40px) + 30px);
-    top: calc(clamp(20px, 2.6vw, 40px) + 20px);
-    margin: 0;
-    z-index: 15;
-  }
-  .app:has(.landing-panel.is-active) .brand img{
-    height: 64px;
-  }
-  .app:has(.landing-panel.is-active) .menu-toggle{
-    position: fixed;
-    left: auto;
-    right: clamp(20px, 2.6vw, 40px);
-    top: calc(clamp(20px, 2.6vw, 40px) + 30px);
-    transform: none;
-    z-index: 15;
-  }
-  .app:has(.landing-panel.is-active) .dropdown-nav{
-    position: fixed;
-    left: auto;
-    right: clamp(20px, 2.6vw, 40px);
-    top: calc(clamp(20px, 2.6vw, 40px) + 60px);
-    align-items: flex-end;
-    background: none;
-    z-index: 15;
   }
 
   .landing-frame, .landing-img{
