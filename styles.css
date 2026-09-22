@@ -77,24 +77,17 @@ a:focus-visible, button:focus-visible{
 .footer-note:hover{ opacity: .65; }
 
 /* ---------------------------------------------------------
-   Hero line — fixed bottom-centre, below the image, home/gallery only
+   Hero line — the tagline under the logo in the masthead.
+   Desktop hides it (see min-width query below); on mobile it's
+   always visible, not tied to any particular page.
 --------------------------------------------------------- */
 .hero-line{
-  position: fixed;
-  bottom: calc((100vh - 68.93vh) / 4);
-  left: clamp(24px, 4vw, 64px);
-  right: clamp(24px, 4vw, 64px);
-  text-align: center;
   font-style: italic;
   font-size: 17px;
   line-height: 1.5;
   color: var(--ink-soft);
-  opacity: 0;
-  transition: opacity 1.1s var(--ease-lux);
-  pointer-events: none;
-  z-index: 5;
+  margin: 0;
 }
-.hero-line.is-active{ opacity: 1; }
 
 /* ---------------------------------------------------------
    App shell — masthead header row, then three columns
@@ -666,15 +659,6 @@ body:has(.landing-panel.is-active) .footer-note{
     overflow-x: visible;
   }
 
-  .hero-line{
-    top: 10px;
-    bottom: auto;
-    left: 16px;
-    right: 16px;
-    text-align: center;
-    font-size: 14px;
-  }
-
   .app{
     grid-template-columns: minmax(0, 1fr);
     /* The photo row is flexible (fills whatever's actually left after
@@ -714,8 +698,14 @@ body:has(.landing-panel.is-active) .footer-note{
   .brand img{
     height: 64px;
   }
-  .nav-link{
+  .hero-line{
     order: 2;
+    flex: 0 0 100%;
+    text-align: center;
+    font-size: 15px;
+  }
+  .nav-link{
+    order: 3;
     font-size: 15px;
   }
 

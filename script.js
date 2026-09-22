@@ -10,7 +10,6 @@
   var images = document.querySelectorAll(".piece-img");
   var captions = document.querySelectorAll(".caption");
 
-  var heroLine = document.getElementById("heroLine");
   var downBtns = document.querySelectorAll('[data-role="down"]');
   var upBtns = document.querySelectorAll('[data-role="up"]');
   var leftBtns = document.querySelectorAll('[data-role="left"]');
@@ -124,7 +123,6 @@
     document.querySelectorAll(".nav-link").forEach(function (link) {
       link.classList.toggle("is-active", link.dataset.mode === mode);
     });
-    heroLine.classList.toggle("is-active", mode === "gallery");
 
     var downVisible = false;
     var upVisible = false;
