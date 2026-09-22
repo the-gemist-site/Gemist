@@ -580,6 +580,8 @@ body:has(.landing-panel.is-active) .masthead{
   color: inherit;
   border-bottom: 1px solid transparent;
   transition: opacity .2s var(--ease), border-color .2s var(--ease);
+}
+.landing-contact.is-open .contact-line a{
   pointer-events: auto;
 }
 .landing-contact .contact-line a:hover{
@@ -601,8 +603,10 @@ body:has(.landing-panel.is-active) .masthead{
   color: var(--bg);
   opacity: .7;
   cursor: pointer;
-  pointer-events: auto;
   transition: opacity .2s var(--ease);
+}
+.landing-contact.is-open .landing-contact-close{
+  pointer-events: auto;
 }
 .landing-contact-close:hover{ opacity: 1; }
 
