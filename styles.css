@@ -789,10 +789,30 @@ body:has(.landing-panel.is-active) .masthead{
     font-size: 15px;
   }
 
-  .col-center{ grid-column: 1; grid-row: 2; padding: 0; min-height: 0; align-items: center; }
+  /* .frame and .mobile-nav-block are both inside .col-center rather
+     than separate grid rows of their own — an item with no explicit
+     grid-row auto-flows into a brand new implicit row, which used to
+     silently add its own required height and row-gap on top of the
+     three real rows. At a short viewport (e.g. a laptop browser
+     zoomed in) that extra, non-flexible demand could out-grow the
+     available space entirely and squeeze the flexible photo row to
+     nothing. Stacking them in one flex column keeps the nav block's
+     modest, fixed need out of the grid's row accounting — it simply
+     shares the photo's own flexible row instead of claiming another. */
+  .col-center{
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0;
+    min-height: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
   .frame{
+    flex: 1 1 0;
+    min-height: 0;
     width: auto;
-    height: 100%;
+    height: auto;
     max-width: 90%;
     max-height: 100%;
     aspect-ratio: 4 / 5;
@@ -806,6 +826,7 @@ body:has(.landing-panel.is-active) .masthead{
   }
 
   .mobile-nav-block{
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
