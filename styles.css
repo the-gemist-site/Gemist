@@ -261,27 +261,6 @@ a:focus-visible, button:focus-visible{
 }
 .frame-dots .dot.is-active{ opacity: 1; }
 
-.zoom-trigger{
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--ink-soft);
-  cursor: pointer;
-  opacity: .55;
-  transition: opacity .2s var(--ease), color .2s var(--ease);
-  z-index: 2;
-}
-.zoom-trigger:hover{ opacity: 1; color: var(--ink); }
-.zoom-trigger svg{ width: 20px; height: 20px; }
-
 .mobile-nav-block{ display: none; }
 
 /* ---------------------------------------------------------
@@ -470,15 +449,6 @@ body:has(.landing-panel.is-active) .masthead{
   border-radius: 50%;
   opacity: 0;
 }
-
-.landing-zoom-trigger{
-  left: auto;
-  right: 8px;
-  bottom: 8px;
-  color: var(--bg);
-  opacity: .8;
-}
-.landing-zoom-trigger:hover{ opacity: 1; color: var(--bg); }
 
 /* Spotlight — dims the rest of the photo to a small circle of
    light around the active stone. Text can then sit directly on
@@ -764,67 +734,6 @@ body:has(.landing-panel.is-active) .masthead{
   opacity: .65;
   border-color: currentColor;
 }
-
-/* ---------------------------------------------------------
-   Image zoom — lets a visitor actually magnify a photo (to
-   examine a stone closely) without the page itself needing to
-   scroll or reflow. Pinch/scroll to zoom, drag to pan once
-   zoomed, double-click/tap or the close link to exit.
---------------------------------------------------------- */
-.image-zoom{
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: #050505;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s var(--ease-lux);
-}
-.image-zoom.is-open{
-  opacity: 1;
-  pointer-events: auto;
-}
-.image-zoom-viewport{
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.image-zoom-img{
-  max-width: 100%;
-  max-height: 100%;
-  touch-action: none;
-  cursor: zoom-in;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.image-zoom.is-open .image-zoom-img{
-  cursor: grab;
-}
-.image-zoom-close{
-  position: absolute;
-  top: clamp(20px, 2.6vw, 40px);
-  right: clamp(20px, 2.6vw, 40px);
-  z-index: 2;
-  appearance: none;
-  background: none;
-  border: 0;
-  padding: 0;
-  font-family: var(--font);
-  font-style: italic;
-  font-size: 16px;
-  text-transform: lowercase;
-  color: var(--bg);
-  opacity: .7;
-  cursor: pointer;
-  transition: opacity .2s var(--ease);
-}
-.image-zoom-close:hover{ opacity: 1; }
 
 /* ---------------------------------------------------------
    Responsive — stack columns, keep the fixed / non-scrolling
