@@ -10,8 +10,6 @@
   var images = document.querySelectorAll(".piece-img");
   var captions = document.querySelectorAll(".caption");
 
-  var menuToggle = document.getElementById("menuToggle");
-  var dropdownNav = document.getElementById("dropdownNav");
   var heroLine = document.getElementById("heroLine");
   var downBtns = document.querySelectorAll('[data-role="down"]');
   var upBtns = document.querySelectorAll('[data-role="up"]');
@@ -59,31 +57,6 @@
       wrap.classList.toggle("is-visible", count > 1);
     });
   }
-
-  function closeMenu() {
-    dropdownNav.classList.remove("is-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-  }
-
-  function toggleMenu() {
-    var open = dropdownNav.classList.toggle("is-open");
-    menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
-  }
-
-  menuToggle.addEventListener("click", function (e) {
-    e.stopPropagation();
-    toggleMenu();
-  });
-
-  document.addEventListener("click", function (e) {
-    if (!dropdownNav.classList.contains("is-open")) return;
-    if (dropdownNav.contains(e.target) || e.target === menuToggle) return;
-    closeMenu();
-  });
-
-  window.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeMenu();
-  });
 
   // ---------------------------------------------------------
   // Landing — gem hotspots. Desktop hovers a dot to reveal its
@@ -194,7 +167,6 @@
     link.addEventListener("click", function (e) {
       e.preventDefault();
       setMode(link.dataset.mode);
-      closeMenu();
     });
   });
 
