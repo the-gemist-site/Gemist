@@ -442,18 +442,7 @@ body:has(.landing-panel.is-active) .masthead{
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1px solid rgba(18, 53, 78, .5);
-  background: rgba(249, 248, 246, .35);
   opacity: 0;
-  transition: transform .3s var(--ease-lux), background .2s var(--ease), border-color .2s var(--ease), opacity .2s var(--ease);
-}
-.gem-hotspot:hover .gem-hotspot-dot,
-.gem-hotspot:focus-visible .gem-hotspot-dot,
-.gem-hotspot.is-active .gem-hotspot-dot{
-  transform: scale(1.7);
-  background: rgba(18, 53, 78, .12);
-  border-color: var(--ink);
-  opacity: 1;
 }
 
 /* Spotlight — dims the rest of the photo to a small circle of
