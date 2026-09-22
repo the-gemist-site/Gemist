@@ -65,6 +65,7 @@
   var landingTooltip = document.getElementById("landingTooltip");
   var landingTooltipTitle = document.getElementById("landingTooltipTitle");
   var landingTooltipLine = document.getElementById("landingTooltipLine");
+  var landingSpotlight = document.getElementById("landingSpotlight");
   var canHoverGems = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   function positionTooltip(btn) {
@@ -87,10 +88,16 @@
     landingTooltipLine.textContent = btn.dataset.text;
     landingTooltip.classList.add("is-visible");
     positionTooltip(btn);
+    if (landingSpotlight) {
+      landingSpotlight.style.setProperty("--spot-x", btn.style.left);
+      landingSpotlight.style.setProperty("--spot-y", btn.style.top);
+      landingSpotlight.classList.add("is-visible");
+    }
     gemHotspots.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
   }
 
   function resetGemInfo() {
+    if (landingSpotlight) landingSpotlight.classList.remove("is-visible");
     if (!landingTooltip) return;
     landingTooltip.classList.remove("is-visible");
     gemHotspots.forEach(function (b) { b.classList.remove("is-active"); });

@@ -454,14 +454,31 @@ body:has(.landing-panel.is-active) .masthead{
   border-color: var(--ink);
 }
 
+/* Spotlight — dims the rest of the photo to a small circle of
+   light around the active stone. Text can then sit directly on
+   that dimmed area with no card of its own, since dark dimmed
+   photo (and the landing page's own dark background, wherever the
+   tooltip lands) gives light text all the contrast it needs. */
+.landing-spotlight{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s var(--ease-lux);
+  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 32px, rgba(23, 19, 15, .82) 66px);
+}
+.landing-spotlight.is-visible{
+  opacity: 1;
+}
+
 .landing-tooltip{
   position: fixed;
   z-index: 11;
   max-width: min(260px, calc(100vw - 32px));
-  padding: 14px 18px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  box-shadow: 0 12px 32px rgba(18, 53, 78, .14);
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .25s var(--ease-lux), transform .25s var(--ease-lux);
@@ -473,13 +490,14 @@ body:has(.landing-panel.is-active) .masthead{
 }
 .landing-tooltip-title{
   font-size: 16px;
-  color: var(--ink);
+  color: var(--bg);
   margin-bottom: 6px;
 }
 .landing-tooltip-line{
   font-size: 15px;
   line-height: 1.5;
-  color: var(--ink-soft);
+  color: var(--bg);
+  opacity: .8;
 }
 
 .landing-hero{
