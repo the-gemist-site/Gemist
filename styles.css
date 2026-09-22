@@ -465,7 +465,7 @@ body:has(.landing-panel.is-active) .masthead{
   pointer-events: none;
   opacity: 0;
   transition: opacity .35s var(--ease-lux);
-  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 32px, rgba(23, 19, 15, .82) 66px);
+  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 20px, rgba(23, 19, 15, .82) 44px);
 }
 .landing-spotlight.is-visible{
   opacity: 1;

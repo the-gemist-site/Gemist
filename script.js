@@ -118,6 +118,12 @@
     }
   });
 
+  // Clicking anywhere else on the page closes an active stone.
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest(".gem-hotspot")) return;
+    resetGemInfo();
+  });
+
   // ---------------------------------------------------------
   // Landing — enquiries overlay. Covers the photo in place
   // rather than navigating to the main site's Contact page, so
