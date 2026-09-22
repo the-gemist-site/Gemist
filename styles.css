@@ -785,6 +785,14 @@ body:has(.landing-panel.is-active) .footer-note{
   .app:has(.about-panel.is-active),
   .app:has(.contact-panel.is-active){
     grid-template-rows: auto 0px 0px auto;
+    /* The two collapsed rows still carry a row-gap on each side of
+       them, tripling the visual gap above the panel even though
+       they're 0px tall. Remove it and add back a single gap below. */
+    row-gap: 0;
+  }
+  .app:has(.about-panel.is-active) .about-panel,
+  .app:has(.contact-panel.is-active) .contact-panel{
+    margin-top: 34px;
   }
 
   .gem-hotspot{
@@ -823,9 +831,11 @@ body:has(.landing-panel.is-active) .footer-note{
     grid-template-columns: 1fr;
     max-width: 100%;
     margin-left: 0;
-    margin-top: -34px;
     gap: 32px;
     padding: 0;
+  }
+  .contact-col{
+    text-align: center;
   }
   .contact-heading, .contact-line{
     font-size: 16px;
