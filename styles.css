@@ -734,7 +734,7 @@ body:has(.landing-panel.is-active) .masthead{
    Responsive — stack columns, keep the fixed / non-scrolling
    single-view mechanic; swipe or wheel still changes piece
 --------------------------------------------------------- */
-@media (max-width: 1180px){
+@media (max-width: 1180px) and (pointer: coarse){
   .brand img{
     height: 90px;
   }
@@ -948,13 +948,13 @@ body:has(.landing-panel.is-active) .masthead{
   }
 }
 
-@media (max-width: 480px){
+@media (max-width: 480px) and (pointer: coarse){
   .masthead{ column-gap: 14px; }
   .caption-title, .caption-index, .caption-line, .nav-link{
     font-size: 15px;
   }
 }
 
-@media (min-width: 1181px){
+@media (pointer: fine), (min-width: 1181px){
   .hero-line{ display: none; }
 }
