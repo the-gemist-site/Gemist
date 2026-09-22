@@ -387,6 +387,11 @@ body:has(.landing-panel.is-active) .masthead{
   justify-content: center;
   padding: clamp(16px, 2.4vh, 32px) 24px;
 }
+.landing-mark-link{
+  display: block;
+  transition: opacity .2s var(--ease);
+}
+.landing-mark-link:hover{ opacity: .65; }
 .landing-mark{
   width: 88px;
   height: auto;

@@ -6,7 +6,7 @@
   var mode = "landing";
   var galleryIndex = 0;
 
-  var navLinks = document.querySelectorAll(".nav-link, .brand, .landing-enter");
+  var navLinks = document.querySelectorAll(".nav-link, .brand, .landing-enter, .landing-mark-link");
   var images = document.querySelectorAll(".piece-img");
   var captions = document.querySelectorAll(".caption");
 
