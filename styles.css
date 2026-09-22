@@ -677,7 +677,12 @@ body:has(.landing-panel.is-active) .footer-note{
 
   .app{
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
+    /* The photo row is flexible (fills whatever's actually left after
+       the header and caption take their own content-driven height),
+       rather than a fixed vh-based guess — so it tracks the real
+       visible viewport correctly, including Safari's collapsing
+       address bar, instead of a hardcoded reserve that can be wrong. */
+    grid-template-rows: auto minmax(0, 1fr) auto;
     align-items: stretch;
     align-content: start;
     padding: 40px 16px 60px;
@@ -715,7 +720,14 @@ body:has(.landing-panel.is-active) .footer-note{
   }
 
   .col-center{ grid-column: 1; grid-row: 2; padding: 0; min-height: 0; align-items: center; }
-  .frame{ width: min(90%, calc(max(100vh - 440px, 200px) * 4 / 5)); height: auto; aspect-ratio: 4 / 5; margin: 0 auto; }
+  .frame{
+    width: auto;
+    height: 100%;
+    max-width: 90%;
+    max-height: 100%;
+    aspect-ratio: 4 / 5;
+    margin: 0 auto;
+  }
 
   .frame > .scroll-hint,
   .frame > .scroll-hint-h,
