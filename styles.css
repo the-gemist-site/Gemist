@@ -58,25 +58,6 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ---------------------------------------------------------
-   Footer note — fixed bottom-left corner, every page
---------------------------------------------------------- */
-.footer-note{
-  position: fixed;
-  bottom: clamp(20px, 2.6vw, 40px);
-  left: 77.7725vw;
-  right: clamp(20px, 2.6vw, 40px);
-  text-align: left;
-  font-style: italic;
-  font-size: 17px;
-  line-height: 1.5;
-  color: rgba(18, 53, 78, 0.6);
-  cursor: pointer;
-  transition: opacity .2s var(--ease);
-  z-index: 20;
-}
-.footer-note:hover{ opacity: .65; }
-
-/* ---------------------------------------------------------
    Hero line — the tagline under the logo in the masthead.
    Desktop hides it (see min-width query below); on mobile it's
    always visible, not tied to any particular page.
@@ -361,11 +342,10 @@ a:focus-visible, button:focus-visible{
    the app as a fixed, opaque overlay (not a grid item like the
    other panels) so it reads as a threshold to cross rather than
    another slide in the shared gallery layout. The persistent
-   brand/menu corner and the enquiries link are hidden while it's
-   up, so the splash has no shared chrome with the rest of the site.
+   brand/menu corner is hidden while it's up, so the splash has
+   no shared chrome with the rest of the site.
 --------------------------------------------------------- */
-body:has(.landing-panel.is-active) .masthead,
-body:has(.landing-panel.is-active) .footer-note{
+body:has(.landing-panel.is-active) .masthead{
   display: none;
 }
 
@@ -528,6 +508,99 @@ body:has(.landing-panel.is-active) .footer-note{
 }
 .landing-enter:hover{ opacity: .65; }
 
+.landing-enquiries-toggle{
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin-top: 4px;
+  font-family: var(--font);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--bg);
+  opacity: .6;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: opacity .2s var(--ease);
+}
+.landing-enquiries-toggle:hover{ opacity: .85; }
+
+/* ---------------------------------------------------------
+   Landing contact overlay — covers the photo entirely (rather
+   than navigating away to the main site's cream-coloured Contact
+   page) so the splash's own black, chrome-free identity holds;
+   dismissing it returns to the ordinary landing view.
+--------------------------------------------------------- */
+.landing-contact{
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: #17130f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s var(--ease-lux);
+}
+.landing-contact.is-open{
+  opacity: 1;
+  pointer-events: auto;
+}
+.landing-contact-inner{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: clamp(32px, 5vw, 80px);
+  max-width: 900px;
+  padding: 0 24px;
+  pointer-events: none;
+}
+.landing-contact .contact-col{
+  text-align: center;
+  min-width: 0;
+}
+.landing-contact .contact-heading{
+  font-style: italic;
+  font-size: 20px;
+  color: var(--bg);
+  margin-bottom: 22px;
+}
+.landing-contact .contact-line{
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--bg);
+  opacity: .8;
+}
+.landing-contact .contact-line a{
+  color: inherit;
+  border-bottom: 1px solid transparent;
+  transition: opacity .2s var(--ease), border-color .2s var(--ease);
+  pointer-events: auto;
+}
+.landing-contact .contact-line a:hover{
+  opacity: .65;
+  border-color: currentColor;
+}
+.landing-contact-close{
+  position: absolute;
+  top: clamp(20px, 2.6vw, 40px);
+  right: clamp(20px, 2.6vw, 40px);
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: var(--font);
+  font-style: italic;
+  font-size: 16px;
+  text-transform: lowercase;
+  color: var(--bg);
+  opacity: .7;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: opacity .2s var(--ease);
+}
+.landing-contact-close:hover{ opacity: 1; }
+
 /* ---------------------------------------------------------
    About — its own grid item spanning the full width, so the
    copy can be centred in the page rather than tied to the
@@ -646,17 +719,6 @@ body:has(.landing-panel.is-active) .footer-note{
 @media (max-width: 1180px){
   .brand img{
     height: 90px;
-  }
-
-  .footer-note{
-    bottom: 8px;
-    left: 16px;
-    right: 16px;
-    font-size: 13px;
-    line-height: 1.5;
-    text-align: center;
-    white-space: normal;
-    overflow-x: visible;
   }
 
   .app{
@@ -798,6 +860,11 @@ body:has(.landing-panel.is-active) .footer-note{
   .gem-hotspot{
     width: 38px;
     height: 38px;
+  }
+  .landing-contact-inner{
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+    max-width: 320px;
   }
   .about-panel-inner{
     max-width: calc(100% + 10px);

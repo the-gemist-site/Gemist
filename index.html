@@ -23,8 +23,6 @@
 </head>
 <body>
 
-<a href="#" class="footer-note" data-mode="contact">Enquiries and appointments</a>
-
 <div class="app" id="app">
 
   <header class="masthead">
@@ -200,10 +198,32 @@
       <p class="landing-tagline">Every piece begins with a single stone</p>
       <p class="landing-hint">Hover — or tap — a stone to learn its story</p>
       <a href="#" class="landing-enter" data-mode="gallery">Discover the process &rarr;</a>
+      <button type="button" class="landing-enquiries-toggle" id="landingEnquiriesToggle">Enquiries and appointments</button>
     </div>
     <div class="landing-tooltip" id="landingTooltip" role="status" aria-live="polite">
       <p class="landing-tooltip-title" id="landingTooltipTitle"></p>
       <p class="landing-tooltip-line" id="landingTooltipLine"></p>
+    </div>
+    <div class="landing-contact" id="landingContact">
+      <div class="landing-contact-inner">
+        <div class="contact-col">
+          <p class="contact-heading">Contact</p>
+          <p class="contact-line"><a href="https://www.instagram.com/gemsandmax/">Instagram</a></p>
+          <p class="contact-line"><a href="mailto:max@gemsandmax.com">max@gemsandmax.com</a></p>
+          <p class="contact-line"><a href="tel:+31644171716">+31 (0)6 44 17 17 16</a></p>
+        </div>
+        <div class="contact-col">
+          <p class="contact-heading">Location</p>
+          <p class="contact-line">Amsterdam, The Netherlands</p>
+          <p class="contact-line">Bangkok, Thailand</p>
+        </div>
+        <div class="contact-col">
+          <p class="contact-heading">Services</p>
+          <p class="contact-line">Bespoke jewellery</p>
+          <p class="contact-line">Sourcing of specialty stones</p>
+        </div>
+      </div>
+      <button type="button" class="landing-contact-close" id="landingContactClose" aria-label="Close">Close</button>
     </div>
   </div>
 

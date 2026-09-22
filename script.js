@@ -6,7 +6,7 @@
   var mode = "landing";
   var galleryIndex = 0;
 
-  var navLinks = document.querySelectorAll(".nav-link, .brand, .footer-note[data-mode], .landing-enter");
+  var navLinks = document.querySelectorAll(".nav-link, .brand, .landing-enter");
   var images = document.querySelectorAll(".piece-img");
   var captions = document.querySelectorAll(".caption");
 
@@ -111,6 +111,37 @@
     }
   });
 
+  // ---------------------------------------------------------
+  // Landing — enquiries overlay. Covers the photo in place
+  // rather than navigating to the main site's Contact page, so
+  // the splash keeps its own identity until dismissed.
+  // ---------------------------------------------------------
+  var landingContact = document.getElementById("landingContact");
+  var landingEnquiriesToggle = document.getElementById("landingEnquiriesToggle");
+  var landingContactClose = document.getElementById("landingContactClose");
+
+  function closeLandingContact() {
+    if (landingContact) landingContact.classList.remove("is-open");
+  }
+
+  if (landingEnquiriesToggle) {
+    landingEnquiriesToggle.addEventListener("click", function (e) {
+      e.preventDefault();
+      landingContact.classList.add("is-open");
+    });
+  }
+  if (landingContactClose) {
+    landingContactClose.addEventListener("click", function (e) {
+      e.preventDefault();
+      closeLandingContact();
+    });
+  }
+  if (landingContact) {
+    landingContact.addEventListener("click", function (e) {
+      if (e.target === landingContact) closeLandingContact();
+    });
+  }
+
   function render() {
     images.forEach(function (img) {
       var match = img.dataset.mode === mode && (!STEPPABLE_MODES[mode] || Number(img.dataset.i) === galleryIndex);
@@ -155,7 +186,10 @@
   }
 
   function setMode(next) {
-    if (next !== "landing") resetGemInfo();
+    if (next !== "landing") {
+      resetGemInfo();
+      closeLandingContact();
+    }
     mode = next;
     if (STEPPABLE_MODES[mode]) galleryIndex = 0;
     render();
