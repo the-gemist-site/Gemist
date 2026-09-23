@@ -353,7 +353,7 @@ body:has(.landing-panel.is-active) .masthead{
   position: fixed;
   inset: 0;
   z-index: 10;
-  background: #17130f;
+  background: var(--bg);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -396,7 +396,6 @@ body:has(.landing-panel.is-active) .masthead{
   width: clamp(40px, 11vh, 88px);
   height: auto;
   opacity: .95;
-  filter: brightness(0) invert(1);
 }
 
 .landing-stage{
@@ -450,18 +449,18 @@ body:has(.landing-panel.is-active) .masthead{
   opacity: 0;
 }
 
-/* Spotlight — dims the rest of the photo to a small circle of
-   light around the active stone. Text can then sit directly on
-   that dimmed area with no card of its own, since dark dimmed
-   photo (and the landing page's own dark background, wherever the
-   tooltip lands) gives light text all the contrast it needs. */
+/* Spotlight — washes the rest of the photo out towards the paper
+   colour, leaving a small clear circle around the active stone.
+   Text can then sit directly on that washed area with no card of
+   its own, since the pale wash gives dark ink all the contrast it
+   needs. */
 .landing-spotlight{
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0;
   transition: opacity .35s var(--ease-lux);
-  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 15px, rgba(23, 19, 15, .6) 30px);
+  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 15px, rgba(249, 248, 246, .72) 30px);
 }
 .landing-spotlight.is-visible{
   opacity: 1;
@@ -475,7 +474,7 @@ body:has(.landing-panel.is-active) .masthead{
   background: none;
   border: 0;
   box-shadow: none;
-  text-shadow: 0 1px 10px rgba(23, 19, 15, .7);
+  text-shadow: 0 0 10px rgba(249, 248, 246, .9);
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .25s var(--ease-lux), transform .25s var(--ease-lux);
@@ -487,19 +486,19 @@ body:has(.landing-panel.is-active) .masthead{
 }
 .landing-tooltip-title{
   font-size: 16px;
-  color: var(--bg);
+  color: var(--ink);
 }
 .landing-tooltip-meta{
   font-size: 13px;
   font-style: italic;
-  color: var(--bg);
+  color: var(--ink);
   opacity: .65;
   margin-bottom: 8px;
 }
 .landing-tooltip-line{
   font-size: 15px;
   line-height: 1.5;
-  color: var(--bg);
+  color: var(--ink);
   opacity: .8;
 }
 
@@ -516,28 +515,28 @@ body:has(.landing-panel.is-active) .masthead{
   font-style: italic;
   font-size: clamp(14px, min(2.4vw, 3.4vh), 28px);
   line-height: 1.4;
-  color: var(--bg);
+  color: var(--ink);
   max-width: 560px;
 }
 .landing-hint{
   font-size: clamp(11px, 1.8vh, 14px);
-  color: var(--bg);
+  color: var(--ink);
   opacity: .65;
 }
 .landing-enter{
   margin-top: clamp(4px, 1vh, 10px);
   padding: clamp(6px, 1.1vh, 10px) clamp(18px, 2.2vw, 28px);
-  border: 1px solid rgba(249, 248, 246, .55);
+  border: 1px solid rgba(18, 53, 78, .5);
   font-style: italic;
   font-size: clamp(13px, min(2vw, 2.2vh), 17px);
-  color: var(--bg);
+  color: var(--ink);
   transition: background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
 }
 .landing-enter:hover,
 .landing-enter:focus-visible{
-  background-color: var(--bg);
-  border-color: var(--bg);
-  color: #17130f;
+  background-color: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
 }
 
 .landing-enquiries-toggle{
@@ -549,7 +548,7 @@ body:has(.landing-panel.is-active) .masthead{
   font-family: var(--font);
   font-style: italic;
   font-size: clamp(11px, 1.6vh, 14px);
-  color: var(--bg);
+  color: var(--ink);
   opacity: .6;
   cursor: pointer;
   text-transform: lowercase;
@@ -559,15 +558,14 @@ body:has(.landing-panel.is-active) .masthead{
 
 /* ---------------------------------------------------------
    Landing contact overlay — covers the photo entirely (rather
-   than navigating away to the main site's cream-coloured Contact
-   page) so the splash's own black, chrome-free identity holds;
+   than navigating away to the main site's Contact page) so the splash's own chrome-free identity holds;
    dismissing it returns to the ordinary landing view.
 --------------------------------------------------------- */
 .landing-contact{
   position: absolute;
   inset: 0;
   z-index: 20;
-  background: #17130f;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -594,13 +592,13 @@ body:has(.landing-panel.is-active) .masthead{
 .landing-contact .contact-heading{
   font-style: italic;
   font-size: 20px;
-  color: var(--bg);
+  color: var(--ink);
   margin-bottom: 22px;
 }
 .landing-contact .contact-line{
   font-size: 18px;
   line-height: 1.7;
-  color: var(--bg);
+  color: var(--ink);
   opacity: .8;
 }
 .landing-contact .contact-line a{
@@ -627,7 +625,7 @@ body:has(.landing-panel.is-active) .masthead{
   font-style: italic;
   font-size: 16px;
   text-transform: lowercase;
-  color: var(--bg);
+  color: var(--ink);
   opacity: .7;
   cursor: pointer;
   transition: opacity .2s var(--ease);
