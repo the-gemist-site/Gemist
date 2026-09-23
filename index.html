@@ -47,11 +47,9 @@
       <img class="piece-img" data-i="2" data-mode="gallery" src="images/process-3.jpeg" alt="A charcoal pencil resting amid its own scattered dust and shavings, a design sketch taking shape">
       <img class="piece-img" data-i="3" data-mode="gallery" src="images/process-4.jpeg" alt="Wax and metal ring components in progress, from cast setting to finished band">
       <img class="piece-img" data-i="4" data-mode="gallery" src="images/process-5.jpeg" alt="A pink sapphire and diamond bracelet resting on crumpled paper, the finished piece">
-      <img class="piece-img" data-i="0" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-1.jpg" alt="Emerald-cut sapphire ring with tapered baguette diamonds in platinum">
-      <img class="piece-img" data-i="1" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-2.jpg" alt="Detail of the sapphire's table and diamond baguette setting">
-      <img class="piece-img" data-i="2" data-piece="0" data-mode="pieces" src="images/gallery/piece-01-3.jpg" alt="Detail of the sapphire's pavilion and gallery setting">
-      <img class="piece-img" data-i="3" data-piece="1" data-mode="pieces" src="images/gallery/piece-02-1.jpg" alt="Three-stone round brilliant diamond ring in yellow gold">
-      <img class="piece-img" data-i="4" data-piece="2" data-mode="pieces" src="images/gallery/piece-03-1.jpg" alt="Oval ruby ring with tapered baguette diamond accents in platinum">
+      <img class="piece-img" data-i="0" data-mode="pieces" src="images/gallery/piece-01-1.jpg" alt="Emerald-cut sapphire ring with tapered baguette diamonds in platinum">
+      <img class="piece-img" data-i="1" data-mode="pieces" src="images/gallery/piece-02-1.jpg" alt="Three-stone round brilliant diamond ring in yellow gold">
+      <img class="piece-img" data-i="2" data-mode="pieces" src="images/gallery/piece-03-1.jpg" alt="Oval ruby ring with tapered baguette diamond accents in platinum">
       <button type="button" class="scroll-hint scroll-hint-up" data-role="up" aria-label="Show previous piece">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 15 L12 8 L20 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -62,25 +60,17 @@
           <path d="M4 9 L12 16 L20 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button type="button" class="scroll-hint-h scroll-hint-left" data-role="left" aria-label="Show previous image">
+      <button type="button" class="zoom-trigger" id="zoomTrigger" aria-label="Zoom in on the photo" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M15 4 L8 12 L15 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="10.5" cy="10.5" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <line x1="15.2" y1="15.2" x2="20" y2="20" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="7.8" y1="10.5" x2="13.2" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <line class="zoom-plus-v" x1="10.5" y1="7.8" x2="10.5" y2="13.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         </svg>
       </button>
-      <button type="button" class="scroll-hint-h scroll-hint-right" data-role="right" aria-label="Show next image">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M9 4 L16 12 L9 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <div class="frame-dots" data-role="dots" aria-hidden="true"></div>
     </div>
     <div class="mobile-nav-block" id="mobileNavBlock" aria-hidden="true">
       <div class="mobile-nav-row">
-        <button type="button" class="scroll-hint-h scroll-hint-left" data-role="left" aria-label="Show previous image">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M15 4 L8 12 L15 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
         <button type="button" class="scroll-hint scroll-hint-up" data-role="up" aria-label="Show previous piece">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M4 15 L12 8 L20 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -91,13 +81,7 @@
             <path d="M4 9 L12 16 L20 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <button type="button" class="scroll-hint-h scroll-hint-right" data-role="right" aria-label="Show next image">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 4 L16 12 L9 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
       </div>
-      <div class="frame-dots" data-role="dots" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -137,35 +121,21 @@
       </div>
       <p class="caption-line">The finished jewel is presented: an extension of the body</p>
     </div>
-    <div class="caption" data-i="0" data-piece="0" data-mode="pieces">
+    <div class="caption" data-i="0" data-mode="pieces">
       <div class="caption-row">
         <p class="caption-title">Sapphire Ring</p>
         <p class="caption-index">No. 01 of 03</p>
       </div>
       <p class="caption-line">2.52ct emerald-cut sapphire, tapered baguette diamonds, platinum</p>
     </div>
-    <div class="caption" data-i="1" data-piece="0" data-mode="pieces">
-      <div class="caption-row">
-        <p class="caption-title">Sapphire Ring</p>
-        <p class="caption-index">No. 01 of 03</p>
-      </div>
-      <p class="caption-line">Detail of the baguette diamond setting</p>
-    </div>
-    <div class="caption" data-i="2" data-piece="0" data-mode="pieces">
-      <div class="caption-row">
-        <p class="caption-title">Sapphire Ring</p>
-        <p class="caption-index">No. 01 of 03</p>
-      </div>
-      <p class="caption-line">Detail of the sapphire and gallery</p>
-    </div>
-    <div class="caption" data-i="3" data-piece="1" data-mode="pieces">
+    <div class="caption" data-i="1" data-mode="pieces">
       <div class="caption-row">
         <p class="caption-title">Diamond Ring</p>
         <p class="caption-index">No. 02 of 03</p>
       </div>
       <p class="caption-line">Three-stone round brilliant diamonds, 18k yellow gold</p>
     </div>
-    <div class="caption" data-i="4" data-piece="2" data-mode="pieces">
+    <div class="caption" data-i="2" data-mode="pieces">
       <div class="caption-row">
         <p class="caption-title">Ruby Ring</p>
         <p class="caption-index">No. 03 of 03</p>

@@ -208,9 +208,10 @@ a:focus-visible, button:focus-visible{
   .scroll-hint svg{ animation: none; }
 }
 
-.scroll-hint-h{
+.zoom-trigger{
   position: absolute;
-  right: 16px;
+  left: calc(var(--img-inset-x, 0px) + 12px);
+  bottom: calc(var(--img-inset-y, 0px) + 12px);
   width: 32px;
   height: 32px;
   display: flex;
@@ -226,40 +227,34 @@ a:focus-visible, button:focus-visible{
   pointer-events: none;
   z-index: 2;
 }
-.scroll-hint-h.is-visible{
-  opacity: 1;
+.zoom-trigger.is-visible{
+  opacity: .7;
   pointer-events: auto;
 }
-.scroll-hint-h:hover{ color: var(--ink); }
-.scroll-hint-h svg{
-  width: 22px;
-  height: 22px;
-}
-.scroll-hint-left{ bottom: 56px; }
-.scroll-hint-right{ bottom: 16px; }
+.zoom-trigger.is-visible:hover,
+.frame.is-zoomed .zoom-trigger{ opacity: 1; color: var(--ink); }
+.zoom-trigger svg{ width: 22px; height: 22px; }
+.frame.is-zoomed .zoom-plus-v{ display: none; }
 
-.frame-dots{
-  position: absolute;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  opacity: 0;
-  transition: opacity .6s var(--ease-lux);
-  pointer-events: none;
-  z-index: 2;
+/* Zoom happens inside the frame itself, so the page never has to
+   scroll or open an overlay: the active photo is magnified in place
+   and dragged to pan. script.js clips it to the photo's own edges. */
+.frame.is-zoomed{
+  overflow: hidden;
 }
-.frame-dots.is-visible{ opacity: 1; }
-.frame-dots .dot{
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ink-soft);
-  opacity: .35;
-  transition: opacity .3s var(--ease);
+.frame.is-zoomed .piece-img.is-active{
+  transform: translate(var(--zoom-x, 0px), var(--zoom-y, 0px)) scale(2.5);
+  transition: opacity 1s var(--ease-lux);
+  cursor: grab;
+  touch-action: none;
 }
-.frame-dots .dot.is-active{ opacity: 1; }
+.frame.is-zoom-anim .piece-img.is-active{
+  transition: opacity 1s var(--ease-lux), transform .45s var(--ease-lux), clip-path .45s var(--ease-lux);
+}
+.frame.is-zoomed.is-panning .piece-img.is-active{
+  transition: none;
+  cursor: grabbing;
+}
 
 .mobile-nav-block{ display: none; }
 
@@ -352,7 +347,7 @@ body:has(.landing-panel.is-active) .masthead{
 .landing-panel{
   --l-bg: var(--bg);
   --l-ink: var(--ink);
-  --l-wash: rgba(249, 248, 246, .72);
+  --l-wash: rgba(249, 248, 246, .45);
   --l-halo: rgba(249, 248, 246, .9);
   --l-line: rgba(18, 53, 78, .5);
   --l-logo-filter: none;
@@ -372,7 +367,7 @@ body:has(.landing-panel.is-active) .masthead{
 .landing-panel.is-dark{
   --l-bg: #17130f;
   --l-ink: #f9f8f6;
-  --l-wash: rgba(23, 19, 15, .6);
+  --l-wash: rgba(23, 19, 15, .4);
   --l-halo: rgba(23, 19, 15, .7);
   --l-line: rgba(249, 248, 246, .55);
   /* The logo file is black line art; on dark it's flipped to white. */
@@ -567,9 +562,9 @@ body:has(.landing-panel.is-active) .masthead{
   max-width: 560px;
 }
 .landing-hint{
-  font-size: clamp(11px, 1.8vh, 14px);
+  font-size: clamp(12px, 1.8vh, 14px);
   color: var(--l-ink);
-  opacity: .65;
+  opacity: .9;
 }
 .landing-enter{
   margin-top: clamp(4px, 1vh, 10px);
@@ -595,14 +590,14 @@ body:has(.landing-panel.is-active) .masthead{
   margin-top: clamp(2px, 0.6vh, 4px);
   font-family: var(--font);
   font-style: italic;
-  font-size: clamp(11px, 1.6vh, 14px);
+  font-size: clamp(12px, 1.7vh, 15px);
   color: var(--l-ink);
-  opacity: .6;
+  opacity: .9;
   cursor: pointer;
   text-transform: lowercase;
   transition: opacity .2s var(--ease);
 }
-.landing-enquiries-toggle:hover{ opacity: .85; }
+.landing-enquiries-toggle:hover{ opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------------------------------------------------------
    Landing contact overlay — covers the photo entirely (rather
@@ -883,9 +878,7 @@ body:has(.landing-panel.is-active) .masthead{
     margin: 0 auto;
   }
 
-  .frame > .scroll-hint,
-  .frame > .scroll-hint-h,
-  .frame > .frame-dots{
+  .frame > .scroll-hint{
     display: none;
   }
 
@@ -902,15 +895,8 @@ body:has(.landing-panel.is-active) .masthead{
     justify-content: center;
     gap: 28px;
   }
-  .mobile-nav-block .scroll-hint,
-  .mobile-nav-block .scroll-hint-h{
+  .mobile-nav-block .scroll-hint{
     position: static;
-  }
-  .mobile-nav-block .frame-dots{
-    position: static;
-    left: auto;
-    bottom: auto;
-    transform: none;
   }
 
   .col-right{ grid-column: 1; grid-row: 3; height: auto; min-height: 5.6em; }

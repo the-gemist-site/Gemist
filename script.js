@@ -1,8 +1,7 @@
 (function () {
   "use strict";
 
-  var GALLERY_COUNT = 5;
-  var STEPPABLE_MODES = { gallery: true, pieces: true };
+  var STEP_COUNTS = { gallery: 5, pieces: 3 };
   var mode = "landing";
   var galleryIndex = 0;
 
@@ -12,50 +11,6 @@
 
   var downBtns = document.querySelectorAll('[data-role="down"]');
   var upBtns = document.querySelectorAll('[data-role="up"]');
-  var leftBtns = document.querySelectorAll('[data-role="left"]');
-  var rightBtns = document.querySelectorAll('[data-role="right"]');
-  var dotWraps = document.querySelectorAll('[data-role="dots"]');
-
-  // Build piece boundary metadata from the "pieces" mode images in the DOM.
-  // Each piece's images are listed contiguously and share a data-piece index.
-  var piecesImgs = document.querySelectorAll('.piece-img[data-mode="pieces"]');
-  var PIECES_TOTAL = piecesImgs.length;
-  var piecesPieceOf = [];
-  var pieceStart = [];
-  piecesImgs.forEach(function (img) {
-    var i = Number(img.dataset.i);
-    var p = Number(img.dataset.piece);
-    piecesPieceOf[i] = p;
-    if (pieceStart[p] === undefined) pieceStart[p] = i;
-  });
-  var PIECE_COUNT = pieceStart.length;
-
-  function pieceImageCount(p) {
-    var end = p + 1 < PIECE_COUNT ? pieceStart[p + 1] : PIECES_TOTAL;
-    return end - pieceStart[p];
-  }
-
-  var dotEls = []; // one array of <span> dots per dots-wrap element
-  function renderDots(p, detailIndex) {
-    var count = pieceImageCount(p);
-    dotWraps.forEach(function (wrap, wi) {
-      if (!dotEls[wi] || dotEls[wi].length !== count) {
-        wrap.innerHTML = "";
-        var els = [];
-        for (var d = 0; d < count; d++) {
-          var dot = document.createElement("span");
-          dot.className = "dot";
-          wrap.appendChild(dot);
-          els.push(dot);
-        }
-        dotEls[wi] = els;
-      }
-      dotEls[wi].forEach(function (dot, d) {
-        dot.classList.toggle("is-active", d === detailIndex);
-      });
-      wrap.classList.toggle("is-visible", count > 1);
-    });
-  }
 
   // ---------------------------------------------------------
   // Landing — gem hotspots. Desktop hovers a dot to reveal its
@@ -182,47 +137,177 @@
     });
   }
 
+  // ---------------------------------------------------------
+  // Gallery zoom — magnifies the active photo inside its own frame
+  // and lets the visitor drag it around; the page never scrolls.
+  // The photos are letterboxed (object-fit: contain), so the zoom
+  // button and the zoomed view are both kept to the photo's own
+  // visible edges rather than the wider frame around it.
+  // ---------------------------------------------------------
+  var frame = document.querySelector(".frame");
+  var zoomTrigger = document.getElementById("zoomTrigger");
+  var ZOOM_SCALE = 2.5;
+  var zoomed = false;
+  var zoomImg = null;
+  var zoomPan = { x: 0, y: 0 };
+  var panStart = null;
+  var zoomAnimTimer = null;
+
+  function activeFrameImg() {
+    return frame.querySelector(".piece-img.is-active");
+  }
+
+  function contentBox(img) {
+    var W = frame.clientWidth;
+    var H = frame.clientHeight;
+    var k = Math.min(W / img.naturalWidth, H / img.naturalHeight);
+    var cw = img.naturalWidth * k;
+    var ch = img.naturalHeight * k;
+    return { W: W, H: H, cw: cw, ch: ch, L: (W - cw) / 2, T: (H - ch) / 2 };
+  }
+
+  function updateZoomAnchor() {
+    var img = activeFrameImg();
+    if (!img || !img.naturalWidth) return;
+    var b = contentBox(img);
+    frame.style.setProperty("--img-inset-x", b.L + "px");
+    frame.style.setProperty("--img-inset-y", b.T + "px");
+  }
+
+  // Clip-path is in the image's own (untransformed) coordinates, so the
+  // photo's visible rectangle is mapped back through the current
+  // translate + scale to find the inset that keeps it exactly in place.
+  function applyZoom() {
+    if (!zoomImg || !zoomImg.naturalWidth) return;
+    var b = contentBox(zoomImg);
+    var s = zoomed ? ZOOM_SCALE : 1;
+    var tx = zoomed ? zoomPan.x : 0;
+    var ty = zoomed ? zoomPan.y : 0;
+    var cx = b.W / 2;
+    var cy = b.H / 2;
+    var left = cx + (b.L - cx - tx) / s;
+    var right = b.W - (cx + (b.W - b.L - cx - tx) / s);
+    var top = cy + (b.T - cy - ty) / s;
+    var bottom = b.H - (cy + (b.H - b.T - cy - ty) / s);
+    zoomImg.style.clipPath = "inset(" + top + "px " + right + "px " + bottom + "px " + left + "px)";
+    frame.style.setProperty("--zoom-x", tx + "px");
+    frame.style.setProperty("--zoom-y", ty + "px");
+  }
+
+  function clampPan(x, y) {
+    var b = contentBox(zoomImg);
+    var maxX = b.cw * (ZOOM_SCALE - 1) / 2;
+    var maxY = b.ch * (ZOOM_SCALE - 1) / 2;
+    return {
+      x: Math.min(maxX, Math.max(-maxX, x)),
+      y: Math.min(maxY, Math.max(-maxY, y))
+    };
+  }
+
+  function setZoomAria(on) {
+    zoomTrigger.setAttribute("aria-pressed", on ? "true" : "false");
+    zoomTrigger.setAttribute("aria-label", on ? "Zoom out" : "Zoom in on the photo");
+  }
+
+  function setZoom(on) {
+    var img = activeFrameImg();
+    if (!img) return;
+    clearTimeout(zoomAnimTimer);
+    zoomImg = img;
+    zoomed = on;
+    zoomPan = { x: 0, y: 0 };
+    panStart = null;
+    frame.classList.remove("is-panning");
+    frame.classList.add("is-zoom-anim");
+    frame.classList.toggle("is-zoomed", on);
+    applyZoom();
+    setZoomAria(on);
+    zoomAnimTimer = setTimeout(function () {
+      frame.classList.remove("is-zoom-anim");
+      if (!zoomed && zoomImg) zoomImg.style.clipPath = "";
+    }, 500);
+  }
+
+  // Leaving a zoomed photo (next piece, another page) snaps it back
+  // without animating, so it can't swell past the frame while it fades.
+  function dropZoomInstantly() {
+    if (!zoomed) return;
+    clearTimeout(zoomAnimTimer);
+    var img = zoomImg;
+    img.style.transition = "none";
+    frame.classList.remove("is-zoomed", "is-zoom-anim", "is-panning");
+    img.style.clipPath = "";
+    void img.offsetWidth;
+    img.style.transition = "";
+    zoomed = false;
+    zoomImg = null;
+    panStart = null;
+    setZoomAria(false);
+  }
+
+  zoomTrigger.addEventListener("click", function (e) {
+    e.preventDefault();
+    setZoom(!zoomed);
+  });
+
+  frame.addEventListener("pointerdown", function (e) {
+    if (!zoomed || e.target !== zoomImg) return;
+    e.preventDefault();
+    frame.setPointerCapture(e.pointerId);
+    frame.classList.add("is-panning");
+    panStart = { px: e.clientX, py: e.clientY, x: zoomPan.x, y: zoomPan.y };
+  });
+  frame.addEventListener("pointermove", function (e) {
+    if (!panStart) return;
+    zoomPan = clampPan(panStart.x + e.clientX - panStart.px, panStart.y + e.clientY - panStart.py);
+    applyZoom();
+  });
+  function endPan() {
+    panStart = null;
+    frame.classList.remove("is-panning");
+  }
+  frame.addEventListener("pointerup", endPan);
+  frame.addEventListener("pointercancel", endPan);
+
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && zoomed) setZoom(false);
+  });
+
+  window.addEventListener("resize", function () {
+    updateZoomAnchor();
+    if (zoomed) {
+      zoomPan = clampPan(zoomPan.x, zoomPan.y);
+      applyZoom();
+    }
+  });
+
+  images.forEach(function (img) {
+    img.addEventListener("load", function () {
+      if (img.classList.contains("is-active")) updateZoomAnchor();
+    });
+  });
+
   function render() {
+    dropZoomInstantly();
     images.forEach(function (img) {
-      var match = img.dataset.mode === mode && (!STEPPABLE_MODES[mode] || Number(img.dataset.i) === galleryIndex);
+      var match = img.dataset.mode === mode && (!STEP_COUNTS[mode] || Number(img.dataset.i) === galleryIndex);
       img.classList.toggle("is-active", match);
     });
     captions.forEach(function (cap) {
-      var match = cap.dataset.mode === mode && (!STEPPABLE_MODES[mode] || Number(cap.dataset.i) === galleryIndex);
+      var match = cap.dataset.mode === mode && (!STEP_COUNTS[mode] || Number(cap.dataset.i) === galleryIndex);
       cap.classList.toggle("is-active", match);
     });
     document.querySelectorAll(".nav-link").forEach(function (link) {
       link.classList.toggle("is-active", link.dataset.mode === mode);
     });
 
-    var downVisible = false;
-    var upVisible = false;
-    if (mode === "gallery") {
-      downVisible = galleryIndex < GALLERY_COUNT - 1;
-      upVisible = galleryIndex > 0;
-    } else if (mode === "pieces") {
-      var curPiece = piecesPieceOf[galleryIndex];
-      downVisible = curPiece < PIECE_COUNT - 1;
-      upVisible = curPiece > 0;
-    }
+    var count = STEP_COUNTS[mode] || 0;
+    var downVisible = count > 0 && galleryIndex < count - 1;
+    var upVisible = count > 0 && galleryIndex > 0;
     downBtns.forEach(function (b) { b.classList.toggle("is-visible", downVisible); });
     upBtns.forEach(function (b) { b.classList.toggle("is-visible", upVisible); });
-
-    var leftVisible = false;
-    var rightVisible = false;
-    if (mode === "pieces") {
-      var piece = piecesPieceOf[galleryIndex];
-      var start = pieceStart[piece];
-      var detailIndex = galleryIndex - start;
-      var count = pieceImageCount(piece);
-      leftVisible = detailIndex > 0;
-      rightVisible = detailIndex < count - 1;
-      renderDots(piece, detailIndex);
-    } else {
-      dotWraps.forEach(function (wrap) { wrap.classList.remove("is-visible"); });
-    }
-    leftBtns.forEach(function (b) { b.classList.toggle("is-visible", leftVisible); });
-    rightBtns.forEach(function (b) { b.classList.toggle("is-visible", rightVisible); });
+    zoomTrigger.classList.toggle("is-visible", mode === "pieces");
+    updateZoomAnchor();
   }
 
   function setMode(next) {
@@ -231,7 +316,7 @@
       closeLandingContact();
     }
     mode = next;
-    if (STEPPABLE_MODES[mode]) galleryIndex = 0;
+    if (STEP_COUNTS[mode]) galleryIndex = 0;
     render();
   }
 
@@ -244,60 +329,38 @@
 
   var wheelLock = false;
 
-  // axis: "v" moves between gallery steps / pieces; "h" moves between a
-  // piece's own detail images without leaving that piece.
-  function step(axis, dir) {
-    if (mode === "gallery") {
-      var next = galleryIndex + dir;
-      if (next < 0 || next >= GALLERY_COUNT) return;
-      galleryIndex = next;
-      render();
-      return;
-    }
-    if (mode === "pieces") {
-      var curPiece = piecesPieceOf[galleryIndex];
-      if (axis === "h") {
-        var nextIndex = galleryIndex + dir;
-        if (nextIndex < 0 || nextIndex >= PIECES_TOTAL) return;
-        if (piecesPieceOf[nextIndex] !== curPiece) return;
-        galleryIndex = nextIndex;
-      } else {
-        var targetPiece = curPiece + dir;
-        if (targetPiece < 0 || targetPiece >= PIECE_COUNT) return;
-        galleryIndex = pieceStart[targetPiece];
-      }
-      render();
-    }
+  function step(dir) {
+    var count = STEP_COUNTS[mode];
+    if (!count) return;
+    var next = galleryIndex + dir;
+    if (next < 0 || next >= count) return;
+    galleryIndex = next;
+    render();
   }
 
-  function bindStep(btns, axis, dir) {
-    btns.forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (wheelLock) return;
-        wheelLock = true;
-        step(axis, dir);
-        setTimeout(function () { wheelLock = false; }, 800);
-      });
-    });
+  function stepLocked(dir) {
+    if (wheelLock) return;
+    wheelLock = true;
+    step(dir);
+    setTimeout(function () { wheelLock = false; }, 800);
   }
-  bindStep(downBtns, "v", 1);
-  bindStep(upBtns, "v", -1);
-  bindStep(rightBtns, "h", 1);
-  bindStep(leftBtns, "h", -1);
+
+  downBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) { e.preventDefault(); stepLocked(1); });
+  });
+  upBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) { e.preventDefault(); stepLocked(-1); });
+  });
 
   window.addEventListener(
     "wheel",
     function (e) {
-      if (!STEPPABLE_MODES[mode]) return;
+      if (!STEP_COUNTS[mode] || zoomed) return;
       if (wheelLock) { e.preventDefault(); return; }
-      var horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-      var delta = horizontal ? e.deltaX : e.deltaY;
+      var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       if (Math.abs(delta) < 12) return;
       e.preventDefault();
-      wheelLock = true;
-      step(horizontal ? "h" : "v", delta > 0 ? 1 : -1);
-      setTimeout(function () { wheelLock = false; }, 800);
+      stepLocked(delta > 0 ? 1 : -1);
     },
     { passive: false }
   );
@@ -320,27 +383,18 @@
       var dy = touchStartY - e.changedTouches[0].clientY;
       touchStartX = null;
       touchStartY = null;
-      if (!STEPPABLE_MODES[mode]) return;
-      if (wheelLock) return;
-      var horizontal = Math.abs(dx) > Math.abs(dy);
-      var delta = horizontal ? dx : dy;
+      if (!STEP_COUNTS[mode] || zoomed) return;
+      var delta = Math.abs(dx) > Math.abs(dy) ? dx : dy;
       if (Math.abs(delta) < 40) return;
-      wheelLock = true;
-      step(horizontal ? "h" : "v", horizontal ? (delta > 0 ? 1 : -1) : (delta > 0 ? 1 : -1));
-      setTimeout(function () { wheelLock = false; }, 800);
+      stepLocked(delta > 0 ? 1 : -1);
     },
     { passive: true }
   );
 
   window.addEventListener("keydown", function (e) {
-    if (!STEPPABLE_MODES[mode]) return;
-    if (e.key !== "ArrowDown" && e.key !== "ArrowRight" && e.key !== "ArrowUp" && e.key !== "ArrowLeft") return;
-    if (wheelLock) return;
-    wheelLock = true;
-    var horizontal = e.key === "ArrowLeft" || e.key === "ArrowRight";
-    var dir = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
-    step(horizontal ? "h" : "v", dir);
-    setTimeout(function () { wheelLock = false; }, 800);
+    if (!STEP_COUNTS[mode]) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") stepLocked(1);
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") stepLocked(-1);
   });
 
   render();
