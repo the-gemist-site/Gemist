@@ -64,6 +64,7 @@
   var gemHotspots = document.querySelectorAll(".gem-hotspot");
   var landingTooltip = document.getElementById("landingTooltip");
   var landingTooltipTitle = document.getElementById("landingTooltipTitle");
+  var landingTooltipMeta = document.getElementById("landingTooltipMeta");
   var landingTooltipLine = document.getElementById("landingTooltipLine");
   var landingSpotlight = document.getElementById("landingSpotlight");
   var canHoverGems = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -85,6 +86,7 @@
   function showGem(btn) {
     if (!landingTooltip) return;
     landingTooltipTitle.textContent = btn.dataset.title;
+    landingTooltipMeta.textContent = btn.dataset.meta;
     landingTooltipLine.textContent = btn.dataset.text;
     landingTooltip.classList.add("is-visible");
     positionTooltip(btn);

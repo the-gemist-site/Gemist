@@ -461,7 +461,7 @@ body:has(.landing-panel.is-active) .masthead{
   pointer-events: none;
   opacity: 0;
   transition: opacity .35s var(--ease-lux);
-  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 15px, rgba(23, 19, 15, .82) 30px);
+  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 15px, rgba(23, 19, 15, .6) 30px);
 }
 .landing-spotlight.is-visible{
   opacity: 1;
@@ -470,11 +470,12 @@ body:has(.landing-panel.is-active) .masthead{
 .landing-tooltip{
   position: fixed;
   z-index: 11;
-  max-width: min(260px, calc(100vw - 32px));
+  max-width: min(300px, calc(100vw - 32px));
   padding: 0;
   background: none;
   border: 0;
   box-shadow: none;
+  text-shadow: 0 1px 10px rgba(23, 19, 15, .7);
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .25s var(--ease-lux), transform .25s var(--ease-lux);
@@ -487,7 +488,13 @@ body:has(.landing-panel.is-active) .masthead{
 .landing-tooltip-title{
   font-size: 16px;
   color: var(--bg);
-  margin-bottom: 6px;
+}
+.landing-tooltip-meta{
+  font-size: 13px;
+  font-style: italic;
+  color: var(--bg);
+  opacity: .65;
+  margin-bottom: 8px;
 }
 .landing-tooltip-line{
   font-size: 15px;
@@ -518,14 +525,20 @@ body:has(.landing-panel.is-active) .masthead{
   opacity: .65;
 }
 .landing-enter{
-  margin-top: clamp(2px, 0.6vh, 6px);
+  margin-top: clamp(4px, 1vh, 10px);
+  padding: clamp(6px, 1.1vh, 10px) clamp(18px, 2.2vw, 28px);
+  border: 1px solid rgba(249, 248, 246, .55);
   font-style: italic;
-  font-size: clamp(13px, 2vh, 17px);
+  font-size: clamp(13px, min(2vw, 2.2vh), 17px);
   color: var(--bg);
-  opacity: .85;
-  transition: opacity .2s var(--ease);
+  transition: background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
 }
-.landing-enter:hover{ opacity: .65; }
+.landing-enter:hover,
+.landing-enter:focus-visible{
+  background-color: var(--bg);
+  border-color: var(--bg);
+  color: #17130f;
+}
 
 .landing-enquiries-toggle{
   appearance: none;
