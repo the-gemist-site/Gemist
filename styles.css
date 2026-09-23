@@ -350,10 +350,16 @@ body:has(.landing-panel.is-active) .masthead{
 }
 
 .landing-panel{
+  --l-bg: var(--bg);
+  --l-ink: var(--ink);
+  --l-wash: rgba(249, 248, 246, .72);
+  --l-halo: rgba(249, 248, 246, .9);
+  --l-line: rgba(18, 53, 78, .5);
+  --l-logo-filter: none;
   position: fixed;
   inset: 0;
   z-index: 10;
-  background: var(--bg);
+  background: var(--l-bg);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -363,14 +369,55 @@ body:has(.landing-panel.is-active) .masthead{
      whatever page is arriving underneath it. */
   transition: opacity .35s var(--ease-lux), transform .35s var(--ease-lux);
 }
+.landing-panel.is-dark{
+  --l-bg: #17130f;
+  --l-ink: #f9f8f6;
+  --l-wash: rgba(23, 19, 15, .6);
+  --l-halo: rgba(23, 19, 15, .7);
+  --l-line: rgba(249, 248, 246, .55);
+  /* The logo file is black line art; on dark it's flipped to white. */
+  --l-logo-filter: brightness(0) invert(1);
+}
 .landing-panel.is-active{
   pointer-events: none;
   transition: opacity 1s var(--ease-lux), transform 1s var(--ease-lux);
 }
 .landing-panel.is-active .landing-stage,
 .landing-panel.is-active .landing-hero,
-.landing-panel.is-active .landing-top{
+.landing-panel.is-active .landing-top,
+.landing-panel.is-active .landing-theme-toggle{
   pointer-events: auto;
+}
+
+.landing-theme-toggle{
+  position: absolute;
+  top: clamp(14px, 2.6vh, 36px);
+  right: clamp(16px, 2.6vw, 40px);
+  z-index: 12;
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  font-family: var(--font);
+  font-style: italic;
+  font-size: clamp(12px, 1.7vh, 15px);
+  text-transform: lowercase;
+  color: var(--l-ink);
+  cursor: pointer;
+}
+.landing-theme-option{
+  opacity: .4;
+  transition: opacity .2s var(--ease);
+}
+.landing-theme-sep{ opacity: .4; margin: 0 .35em; }
+.landing-panel:not(.is-dark) .landing-theme-option[data-theme="light"],
+.landing-panel.is-dark .landing-theme-option[data-theme="dark"]{
+  opacity: 1;
+}
+.landing-theme-toggle:hover .landing-theme-option{ opacity: .75; }
+.landing-panel:not(.is-dark) .landing-theme-toggle:hover .landing-theme-option[data-theme="light"],
+.landing-panel.is-dark .landing-theme-toggle:hover .landing-theme-option[data-theme="dark"]{
+  opacity: 1;
 }
 
 /* Three stacked flex rows — logo / photo / tagline — rather than a
@@ -396,6 +443,7 @@ body:has(.landing-panel.is-active) .masthead{
   width: clamp(40px, 11vh, 88px);
   height: auto;
   opacity: .95;
+  filter: var(--l-logo-filter);
 }
 
 .landing-stage{
@@ -460,7 +508,7 @@ body:has(.landing-panel.is-active) .masthead{
   pointer-events: none;
   opacity: 0;
   transition: opacity .35s var(--ease-lux);
-  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 15px, rgba(249, 248, 246, .72) 30px);
+  background: radial-gradient(circle 60px at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 15px, var(--l-wash) 30px);
 }
 .landing-spotlight.is-visible{
   opacity: 1;
@@ -474,7 +522,7 @@ body:has(.landing-panel.is-active) .masthead{
   background: none;
   border: 0;
   box-shadow: none;
-  text-shadow: 0 0 10px rgba(249, 248, 246, .9);
+  text-shadow: 0 0 10px var(--l-halo);
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .25s var(--ease-lux), transform .25s var(--ease-lux);
@@ -486,19 +534,19 @@ body:has(.landing-panel.is-active) .masthead{
 }
 .landing-tooltip-title{
   font-size: 16px;
-  color: var(--ink);
+  color: var(--l-ink);
 }
 .landing-tooltip-meta{
   font-size: 13px;
   font-style: italic;
-  color: var(--ink);
+  color: var(--l-ink);
   opacity: .65;
   margin-bottom: 8px;
 }
 .landing-tooltip-line{
   font-size: 15px;
   line-height: 1.5;
-  color: var(--ink);
+  color: var(--l-ink);
   opacity: .8;
 }
 
@@ -515,28 +563,28 @@ body:has(.landing-panel.is-active) .masthead{
   font-style: italic;
   font-size: clamp(14px, min(2.4vw, 3.4vh), 28px);
   line-height: 1.4;
-  color: var(--ink);
+  color: var(--l-ink);
   max-width: 560px;
 }
 .landing-hint{
   font-size: clamp(11px, 1.8vh, 14px);
-  color: var(--ink);
+  color: var(--l-ink);
   opacity: .65;
 }
 .landing-enter{
   margin-top: clamp(4px, 1vh, 10px);
   padding: clamp(6px, 1.1vh, 10px) clamp(18px, 2.2vw, 28px);
-  border: 1px solid rgba(18, 53, 78, .5);
+  border: 1px solid var(--l-line);
   font-style: italic;
   font-size: clamp(13px, min(2vw, 2.2vh), 17px);
-  color: var(--ink);
+  color: var(--l-ink);
   transition: background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
 }
 .landing-enter:hover,
 .landing-enter:focus-visible{
-  background-color: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
+  background-color: var(--l-ink);
+  border-color: var(--l-ink);
+  color: var(--l-bg);
 }
 
 .landing-enquiries-toggle{
@@ -548,7 +596,7 @@ body:has(.landing-panel.is-active) .masthead{
   font-family: var(--font);
   font-style: italic;
   font-size: clamp(11px, 1.6vh, 14px);
-  color: var(--ink);
+  color: var(--l-ink);
   opacity: .6;
   cursor: pointer;
   text-transform: lowercase;
@@ -565,7 +613,7 @@ body:has(.landing-panel.is-active) .masthead{
   position: absolute;
   inset: 0;
   z-index: 20;
-  background: var(--bg);
+  background: var(--l-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -592,13 +640,13 @@ body:has(.landing-panel.is-active) .masthead{
 .landing-contact .contact-heading{
   font-style: italic;
   font-size: 20px;
-  color: var(--ink);
+  color: var(--l-ink);
   margin-bottom: 22px;
 }
 .landing-contact .contact-line{
   font-size: 18px;
   line-height: 1.7;
-  color: var(--ink);
+  color: var(--l-ink);
   opacity: .8;
 }
 .landing-contact .contact-line a{
@@ -625,7 +673,7 @@ body:has(.landing-panel.is-active) .masthead{
   font-style: italic;
   font-size: 16px;
   text-transform: lowercase;
-  color: var(--ink);
+  color: var(--l-ink);
   opacity: .7;
   cursor: pointer;
   transition: opacity .2s var(--ease);

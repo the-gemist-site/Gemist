@@ -157,6 +157,31 @@
     });
   }
 
+  // ---------------------------------------------------------
+  // Landing — light / dark background, remembered per visitor.
+  // ---------------------------------------------------------
+  var landingPanel = document.querySelector(".landing-panel");
+  var landingThemeToggle = document.getElementById("landingThemeToggle");
+  var THEME_KEY = "gm-landing-theme";
+
+  function applyLandingTheme(theme) {
+    var dark = theme === "dark";
+    landingPanel.classList.toggle("is-dark", dark);
+    landingThemeToggle.setAttribute("aria-pressed", dark ? "true" : "false");
+    landingThemeToggle.setAttribute("aria-label", dark ? "Switch to light background" : "Switch to dark background");
+  }
+
+  if (landingPanel && landingThemeToggle) {
+    var savedTheme = null;
+    try { savedTheme = localStorage.getItem(THEME_KEY); } catch (err) {}
+    applyLandingTheme(savedTheme);
+    landingThemeToggle.addEventListener("click", function () {
+      var next = landingPanel.classList.contains("is-dark") ? "light" : "dark";
+      applyLandingTheme(next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (err) {}
+    });
+  }
+
   function render() {
     images.forEach(function (img) {
       var match = img.dataset.mode === mode && (!STEPPABLE_MODES[mode] || Number(img.dataset.i) === galleryIndex);
