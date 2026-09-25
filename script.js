@@ -81,6 +81,36 @@
     resetGemInfo();
   });
 
+  window.addEventListener("resize", function () {
+    var active = document.querySelector(".gem-hotspot.is-active");
+    if (active) positionTooltip(active);
+  });
+
+  // Each arrival on the landing page opens one stone by itself, so a
+  // visitor sees straight away that the stones can be explored. It's
+  // a different stone from the last visit's whenever possible.
+  var LAST_STONE_KEY = "gm-last-stone";
+  var introStoneTimer = null;
+
+  function showIntroStone() {
+    if (!gemHotspots.length) return;
+    var last = null;
+    try { last = localStorage.getItem(LAST_STONE_KEY); } catch (err) {}
+    var pool = Array.prototype.filter.call(gemHotspots, function (b) {
+      return b.dataset.stone !== last;
+    });
+    if (!pool.length) pool = Array.prototype.slice.call(gemHotspots);
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    try { localStorage.setItem(LAST_STONE_KEY, pick.dataset.stone); } catch (err) {}
+    clearTimeout(introStoneTimer);
+    // Waits for the landing fade-in to settle so the text lands in place.
+    introStoneTimer = setTimeout(function () {
+      var busy = document.querySelector(".gem-hotspot.is-active") ||
+        (landingContact && landingContact.classList.contains("is-open"));
+      if (mode === "landing" && !busy) showGem(pick);
+    }, 1100);
+  }
+
   // ---------------------------------------------------------
   // Landing — enquiries overlay. Covers the photo in place
   // rather than navigating to the main site's Contact page, so
@@ -315,7 +345,9 @@
       resetGemInfo();
       closeLandingContact();
     }
+    var arrivingOnLanding = next === "landing" && mode !== "landing";
     mode = next;
+    if (arrivingOnLanding) showIntroStone();
     if (STEP_COUNTS[mode]) galleryIndex = 0;
     render();
   }
@@ -398,4 +430,5 @@
   });
 
   render();
+  if (mode === "landing") showIntroStone();
 })();

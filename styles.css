@@ -58,16 +58,18 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ---------------------------------------------------------
-   Hero line — the tagline under the logo in the masthead.
-   Desktop hides it (see min-width query below); on mobile it's
-   always visible, not tied to any particular page.
+   Hero line — the tagline above the logo in the masthead,
+   deliberately small and quiet so the logo stays the anchor.
 --------------------------------------------------------- */
 .hero-line{
   font-style: italic;
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: .02em;
+  color: var(--ink);
+  opacity: .75;
   margin: 0;
+  text-align: center;
 }
 
 /* ---------------------------------------------------------
@@ -84,31 +86,30 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ---------------------------------------------------------
-   Masthead — editorial header: logo centred, nav links
-   flanking it symmetrically left and right, always visible
-   (no dropdown). Hidden on the landing splash.
+   Masthead — one centred editorial stack on every screen size:
+   tagline, logo, then a single row of nav links (no dropdown).
+   Hidden on the landing splash.
 --------------------------------------------------------- */
 .masthead{
   grid-column: 1 / -1;
   grid-row: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: clamp(32px, 5vw, 96px);
-  padding: clamp(20px, 2.6vw, 40px) clamp(20px, 2.6vw, 40px) 0;
+  gap: clamp(8px, 1.4vh, 14px);
+  padding: clamp(16px, 2.4vh, 32px) clamp(20px, 2.6vw, 40px) 0;
 }
 
 .masthead-nav{
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: baseline;
-  flex: 1 1 0;
-  gap: clamp(24px, 3vw, 56px);
+  column-gap: clamp(22px, 2.6vw, 44px);
+  row-gap: 8px;
 }
-.masthead-nav-left{ justify-content: flex-end; }
-.masthead-nav-right{ justify-content: flex-start; }
 
 .brand{
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   color: var(--ink);
@@ -116,7 +117,7 @@ a:focus-visible, button:focus-visible{
 }
 .brand:hover{ opacity: .65; }
 .brand img{
-  height: 92px;
+  height: clamp(56px, 9vh, 84px);
   width: auto;
   display: block;
 }
@@ -345,12 +346,14 @@ body:has(.landing-panel.is-active) .masthead{
 }
 
 .landing-panel{
-  --l-bg: var(--bg);
+  /* Both palettes sit a step in from the extremes: warm linen rather
+     than the main site's near-white, warm anthracite rather than
+     near-black, so the photo's own beige ground reads softly on either. */
+  --l-bg: #e8e2d9;
   --l-ink: var(--ink);
-  --l-wash: rgba(249, 248, 246, .45);
-  --l-halo: rgba(249, 248, 246, .9);
+  --l-wash: rgba(232, 226, 217, .45);
+  --l-halo: rgba(232, 226, 217, .9);
   --l-line: rgba(18, 53, 78, .5);
-  --l-logo-filter: none;
   position: fixed;
   inset: 0;
   z-index: 10;
@@ -365,13 +368,11 @@ body:has(.landing-panel.is-active) .masthead{
   transition: opacity .35s var(--ease-lux), transform .35s var(--ease-lux);
 }
 .landing-panel.is-dark{
-  --l-bg: #17130f;
-  --l-ink: #f9f8f6;
-  --l-wash: rgba(23, 19, 15, .4);
-  --l-halo: rgba(23, 19, 15, .7);
-  --l-line: rgba(249, 248, 246, .55);
-  /* The logo file is black line art; on dark it's flipped to white. */
-  --l-logo-filter: brightness(0) invert(1);
+  --l-bg: #2c2724;
+  --l-ink: #ece6dd;
+  --l-wash: rgba(44, 39, 36, .4);
+  --l-halo: rgba(44, 39, 36, .7);
+  --l-line: rgba(236, 230, 221, .55);
 }
 .landing-panel.is-active{
   pointer-events: none;
@@ -438,8 +439,13 @@ body:has(.landing-panel.is-active) .masthead{
   width: clamp(40px, 11vh, 88px);
   height: auto;
   opacity: .95;
-  filter: var(--l-logo-filter);
 }
+/* The dark palette gets its own light logo file (logo-light.png, made
+   from logo.png with smoothed edges at twice the resolution) instead
+   of a CSS invert, which showed the original's jagged edges. */
+.landing-mark-on-dark{ display: none; }
+.landing-panel.is-dark .landing-mark-on-light{ display: none; }
+.landing-panel.is-dark .landing-mark-on-dark{ display: block; }
 
 .landing-stage{
   flex: 1 1 auto;
@@ -794,10 +800,6 @@ body:has(.landing-panel.is-active) .masthead{
    single-view mechanic; swipe or wheel still changes piece
 --------------------------------------------------------- */
 @media (max-width: 1180px) and (pointer: coarse){
-  .brand img{
-    height: 90px;
-  }
-
   .app{
     grid-template-columns: minmax(0, 1fr);
     /* The photo row is flexible (fills whatever's actually left after
@@ -815,36 +817,19 @@ body:has(.landing-panel.is-active) .masthead{
   .col-center, .col-right{ min-width: 0; }
   .caption-title, .caption-index{ white-space: normal; }
 
-  /* Masthead on mobile: the logo takes its own full-width row (forcing
-     a wrap), and both nav groups are unwrapped via display:contents so
-     their links flow together onto a single centred, wrapping row
-     below it — still no dropdown, everything stays on screen. */
   .masthead{
     grid-column: 1;
-    flex-wrap: wrap;
-    row-gap: 10px;
-    column-gap: 18px;
+    gap: 10px;
     padding: 0;
   }
-  .masthead-nav{
-    display: contents;
-  }
-  .brand{
-    order: 1;
-    flex: 0 0 100%;
-    justify-content: center;
-  }
+  .masthead-nav{ column-gap: 18px; }
   .brand img{
     height: 64px;
   }
   .hero-line{
-    order: 2;
-    flex: 0 0 100%;
-    text-align: center;
-    font-size: 15px;
+    font-size: 13px;
   }
   .nav-link{
-    order: 3;
     font-size: 15px;
   }
 
@@ -999,12 +984,9 @@ body:has(.landing-panel.is-active) .masthead{
 }
 
 @media (max-width: 480px) and (pointer: coarse){
-  .masthead{ column-gap: 14px; }
+  .masthead-nav{ column-gap: 14px; }
   .caption-title, .caption-index, .caption-line, .nav-link{
     font-size: 15px;
   }
 }
 
-@media (pointer: fine), (min-width: 1181px){
-  .hero-line{ display: none; }
-}
