@@ -12,6 +12,11 @@
 }
 
 :root{
+  /* Shared by the masthead and the landing page so the logo sits in
+     exactly the same place and size on both, and doesn't jump when a
+     visitor crosses from one to the other. */
+  --logo-top: clamp(16px, 2.4vh, 32px);
+  --logo-h: clamp(56px, 9vh, 84px);
   --bg: #f9f8f6;
   --ink: #12354e;
   --ink-soft: #12354e;
@@ -58,7 +63,7 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ---------------------------------------------------------
-   Hero line — the tagline above the logo in the masthead,
+   Hero line — the tagline under the logo in the masthead,
    deliberately small and quiet so the logo stays the anchor.
 --------------------------------------------------------- */
 .hero-line{
@@ -87,7 +92,7 @@ a:focus-visible, button:focus-visible{
 
 /* ---------------------------------------------------------
    Masthead — one centred editorial stack on every screen size:
-   tagline, logo, then a single row of nav links (no dropdown).
+   logo, tagline, then a single row of nav links (no dropdown).
    Hidden on the landing splash.
 --------------------------------------------------------- */
 .masthead{
@@ -97,7 +102,7 @@ a:focus-visible, button:focus-visible{
   flex-direction: column;
   align-items: center;
   gap: clamp(8px, 1.4vh, 14px);
-  padding: clamp(16px, 2.4vh, 32px) clamp(20px, 2.6vw, 40px) 0;
+  padding: var(--logo-top) clamp(20px, 2.6vw, 40px) 0;
 }
 
 .masthead-nav{
@@ -117,7 +122,7 @@ a:focus-visible, button:focus-visible{
 }
 .brand:hover{ opacity: .65; }
 .brand img{
-  height: clamp(56px, 9vh, 84px);
+  height: var(--logo-h);
   width: auto;
   display: block;
 }
@@ -346,13 +351,14 @@ body:has(.landing-panel.is-active) .masthead{
 }
 
 .landing-panel{
-  /* Both palettes sit a step in from the extremes: warm linen rather
-     than the main site's near-white, warm anthracite rather than
-     near-black, so the photo's own beige ground reads softly on either. */
-  --l-bg: #e8e2d9;
+  /* Both palettes sit a step in from the extremes: pale stone grey
+     rather than the main site's near-white, warm anthracite rather
+     than near-black. The light one is kept neutral, not beige, so the
+     photo's own beige ground still stands apart from it. */
+  --l-bg: #e4e3e0;
   --l-ink: var(--ink);
-  --l-wash: rgba(232, 226, 217, .45);
-  --l-halo: rgba(232, 226, 217, .9);
+  --l-wash: rgba(228, 227, 224, .45);
+  --l-halo: rgba(228, 227, 224, .9);
   --l-line: rgba(18, 53, 78, .5);
   position: fixed;
   inset: 0;
@@ -428,7 +434,7 @@ body:has(.landing-panel.is-active) .masthead{
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
-  padding: clamp(8px, 2.4vh, 32px) 24px;
+  padding: var(--logo-top) 24px clamp(8px, 2.4vh, 32px);
 }
 .landing-mark-link{
   display: block;
@@ -436,9 +442,8 @@ body:has(.landing-panel.is-active) .masthead{
 }
 .landing-mark-link:hover{ opacity: .65; }
 .landing-mark{
-  width: clamp(40px, 11vh, 88px);
-  height: auto;
-  opacity: .95;
+  height: var(--logo-h);
+  width: auto;
 }
 /* The dark palette gets its own light logo file (logo-light.png, made
    from logo.png with smoothed edges at twice the resolution) instead
@@ -800,6 +805,10 @@ body:has(.landing-panel.is-active) .masthead{
    single-view mechanic; swipe or wheel still changes piece
 --------------------------------------------------------- */
 @media (max-width: 1180px) and (pointer: coarse){
+  :root{
+    --logo-top: 40px;
+    --logo-h: 64px;
+  }
   .app{
     grid-template-columns: minmax(0, 1fr);
     /* The photo row is flexible (fills whatever's actually left after
@@ -810,7 +819,7 @@ body:has(.landing-panel.is-active) .masthead{
     grid-template-rows: auto minmax(0, 1fr) auto;
     align-items: stretch;
     align-content: start;
-    padding: 40px 16px 60px;
+    padding: var(--logo-top) 16px 60px;
     row-gap: 34px;
   }
 
@@ -823,9 +832,6 @@ body:has(.landing-panel.is-active) .masthead{
     padding: 0;
   }
   .masthead-nav{ column-gap: 18px; }
-  .brand img{
-    height: 64px;
-  }
   .hero-line{
     font-size: 13px;
   }
