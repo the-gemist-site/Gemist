@@ -67,13 +67,15 @@ a:focus-visible, button:focus-visible{
    deliberately small and quiet so the logo stays the anchor.
 --------------------------------------------------------- */
 .hero-line{
+  /* Tucked close under the logo so the two read as one signature;
+     the nav gets clearly more air below (see .masthead-nav). */
+  margin-top: clamp(6px, 1vh, 10px);
   font-style: italic;
   font-size: 14px;
   line-height: 1.4;
   letter-spacing: .02em;
   color: var(--ink);
   opacity: .75;
-  margin: 0;
   text-align: center;
 }
 
@@ -101,11 +103,11 @@ a:focus-visible, button:focus-visible{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(8px, 1.4vh, 14px);
   padding: var(--logo-top) clamp(20px, 2.6vw, 40px) 0;
 }
 
 .masthead-nav{
+  margin-top: clamp(20px, 3.4vh, 34px);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -312,8 +314,11 @@ a:focus-visible, button:focus-visible{
   color: var(--ink);
 }
 
+/* --caption-shift is set per caption by script.js: it pulls the
+   caption left from its column so it sits a fixed, short distance
+   from the photo's actual right edge, whatever the photo's width. */
 .col-right .caption{
-  left: 0;
+  left: var(--caption-shift, 0px);
   top: 0;
   right: auto;
   bottom: auto;
@@ -828,10 +833,13 @@ body:has(.landing-panel.is-active) .masthead{
 
   .masthead{
     grid-column: 1;
-    gap: 10px;
     padding: 0;
   }
-  .masthead-nav{ column-gap: 18px; }
+  .hero-line{ margin-top: 8px; }
+  .masthead-nav{
+    margin-top: 20px;
+    column-gap: 26px;
+  }
   .hero-line{
     font-size: 13px;
   }
@@ -990,7 +998,7 @@ body:has(.landing-panel.is-active) .masthead{
 }
 
 @media (max-width: 480px) and (pointer: coarse){
-  .masthead-nav{ column-gap: 14px; }
+  .masthead-nav{ column-gap: 22px; }
   .caption-title, .caption-index, .caption-line, .nav-link{
     font-size: 15px;
   }

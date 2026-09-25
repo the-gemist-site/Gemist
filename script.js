@@ -196,12 +196,23 @@
     return { W: W, H: H, cw: cw, ch: ch, L: (W - cw) / 2, T: (H - ch) / 2 };
   }
 
-  function updateZoomAnchor() {
+  var colRight = document.querySelector(".col-right");
+
+  // Keeps the zoom button and the caption tied to the photo's own
+  // visible edges rather than to the (wider) frame and column.
+  function updatePhotoLayout() {
     var img = activeFrameImg();
     if (!img || !img.naturalWidth) return;
     var b = contentBox(img);
     frame.style.setProperty("--img-inset-x", b.L + "px");
     frame.style.setProperty("--img-inset-y", b.T + "px");
+
+    var cap = colRight.querySelector(".caption.is-active");
+    if (!cap) return;
+    var photoRight = frame.getBoundingClientRect().left + b.L + b.cw;
+    var gap = Math.min(56, Math.max(32, window.innerWidth * 0.033));
+    var shift = Math.min(0, photoRight + gap - colRight.getBoundingClientRect().left);
+    cap.style.setProperty("--caption-shift", shift + "px");
   }
 
   // Clip-path is in the image's own (untransformed) coordinates, so the
@@ -304,7 +315,7 @@
   });
 
   window.addEventListener("resize", function () {
-    updateZoomAnchor();
+    updatePhotoLayout();
     if (zoomed) {
       zoomPan = clampPan(zoomPan.x, zoomPan.y);
       applyZoom();
@@ -313,7 +324,7 @@
 
   images.forEach(function (img) {
     img.addEventListener("load", function () {
-      if (img.classList.contains("is-active")) updateZoomAnchor();
+      if (img.classList.contains("is-active")) updatePhotoLayout();
     });
   });
 
@@ -337,7 +348,7 @@
     downBtns.forEach(function (b) { b.classList.toggle("is-visible", downVisible); });
     upBtns.forEach(function (b) { b.classList.toggle("is-visible", upVisible); });
     zoomTrigger.classList.toggle("is-visible", mode === "pieces");
-    updateZoomAnchor();
+    updatePhotoLayout();
   }
 
   function setMode(next) {
