@@ -16,7 +16,7 @@
      exactly the same place and size on both, and doesn't jump when a
      visitor crosses from one to the other. */
   --logo-top: clamp(16px, 2.4vh, 32px);
-  --logo-h: clamp(56px, 9vh, 84px);
+  --logo-h: clamp(77px, 12.4vh, 116px);
   --bg: #f9f8f6;
   --ink: #12354e;
   --ink-soft: #12354e;
@@ -69,7 +69,7 @@ a:focus-visible, button:focus-visible{
 .hero-line{
   /* Tucked close under the logo so the two read as one signature;
      the nav gets clearly more air below (see .masthead-nav). */
-  margin-top: clamp(6px, 1vh, 10px);
+  margin-top: clamp(26px, 3.6vh, 34px);
   font-style: italic;
   font-size: 14px;
   line-height: 1.4;
@@ -157,8 +157,10 @@ a:focus-visible, button:focus-visible{
 
 .frame{
   position: relative;
-  width: 90%;
-  height: 62.037vh;
+  width: min(90%, calc(62.037vh * 4 / 5));
+  height: auto;
+  aspect-ratio: 4 / 5;
+  margin: 0 auto;
 }
 
 .piece-img{
@@ -180,7 +182,7 @@ a:focus-visible, button:focus-visible{
 
 .scroll-hint{
   position: absolute;
-  right: 56px;
+  right: -80px;
   bottom: 16px;
   width: 32px;
   height: 32px;
@@ -362,7 +364,7 @@ body:has(.landing-panel.is-active) .masthead{
      photo's own beige ground still stands apart from it. */
   --l-bg: #e4e3e0;
   --l-ink: var(--ink);
-  --l-wash: rgba(228, 227, 224, .45);
+  --l-wash: rgba(228, 227, 224, .4);
   --l-halo: rgba(228, 227, 224, .9);
   --l-line: rgba(18, 53, 78, .5);
   position: fixed;
@@ -379,10 +381,10 @@ body:has(.landing-panel.is-active) .masthead{
   transition: opacity .35s var(--ease-lux), transform .35s var(--ease-lux);
 }
 .landing-panel.is-dark{
-  --l-bg: #2c2724;
+  --l-bg: #12354e;
   --l-ink: #ece6dd;
-  --l-wash: rgba(44, 39, 36, .4);
-  --l-halo: rgba(44, 39, 36, .7);
+  --l-wash: rgba(18, 53, 78, .4);
+  --l-halo: rgba(18, 53, 78, .7);
   --l-line: rgba(236, 230, 221, .55);
 }
 .landing-panel.is-active{
