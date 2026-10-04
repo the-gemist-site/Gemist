@@ -316,6 +316,8 @@
 
   window.addEventListener("resize", function () {
     updatePhotoLayout();
+    var openCap = document.querySelector(".caption.is-open");
+    if (openCap) updateCaptionLift(openCap);
     if (zoomed) {
       zoomPan = clampPan(zoomPan.x, zoomPan.y);
       applyZoom();
@@ -328,6 +330,82 @@
     });
   });
 
+  var narrowLayout = window.matchMedia("(max-width: 1180px) and (pointer: coarse)");
+
+  // On the wide layout the open story would run into the arrows beneath
+  // the photo, so the caption block lifts by just the overlap (plus air).
+  function updateCaptionLift(cap) {
+    var lift = 0;
+    var isOpen = cap.classList.contains("is-open");
+    var body = cap.querySelector(".caption-more-body");
+    var inner = cap.querySelector(".caption-more-inner");
+    if (narrowLayout.matches) {
+      // Stacked layout: the caption is out of flow, so the text column is
+      // sized to it and the flexible photo row shrinks to make room. The
+      // picture always ends up 10% smaller than when the story is closed,
+      // and the story box is no wider than that picture.
+      if (!isOpen) {
+        colRight.style.minHeight = "";
+      } else {
+        // The photo box can be wider than the picture inside it (the picture
+        // is 4:5 and fits within the box), so measure the picture itself.
+        var shown = function () {
+          var b = frame.getBoundingClientRect();
+          var w = Math.min(b.width, b.height * 0.8);
+          return { w: w, h: w / 0.8 };
+        };
+        cap.classList.remove("is-open");
+        colRight.style.minHeight = "";
+        var closedShown = shown();
+        cap.classList.add("is-open");
+        var targetH = closedShown.h * 0.9;
+        cap.style.setProperty("--story-w", Math.max(190, Math.floor(closedShown.w * 0.9) - 2) + "px");
+        var lo = cap.offsetHeight - body.offsetHeight + inner.scrollHeight;
+        colRight.style.minHeight = lo + "px";
+        if (shown().h > targetH + 0.5) {
+          var hi = lo + closedShown.h;
+          for (var n = 0; n < 12; n++) {
+            var mid = (lo + hi) / 2;
+            colRight.style.minHeight = mid + "px";
+            if (shown().h > targetH) lo = mid; else hi = mid;
+          }
+          colRight.style.minHeight = hi + "px";
+        }
+      }
+    } else if (isOpen) {
+      var restingBottom = colRight.getBoundingClientRect().top + cap.offsetTop + cap.offsetHeight - body.offsetHeight;
+      var arrowTop = frame.querySelector(".scroll-hint-up").getBoundingClientRect().top;
+      lift = Math.max(0, restingBottom + inner.scrollHeight + 24 - arrowTop);
+    }
+    cap.style.setProperty("--caption-lift", Math.round(lift) + "px");
+  }
+
+  function setCaptionOpen(cap, open) {
+    if (!cap.classList.contains("is-open") && !open) return;
+    cap.classList.toggle("is-open", open);
+    var btn = cap.querySelector(".caption-more");
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+    updateCaptionLift(cap);
+  }
+
+  // Re-fit if the text reflows later (web font arriving, resize).
+  if (window.ResizeObserver) {
+    document.querySelectorAll(".caption-more-inner p").forEach(function (para) {
+      new ResizeObserver(function () {
+        var cap = para.closest(".caption");
+        if (cap.classList.contains("is-open")) updateCaptionLift(cap);
+      }).observe(para);
+    });
+  }
+
+  document.querySelectorAll(".caption-more").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var cap = btn.closest(".caption");
+      setCaptionOpen(cap, !cap.classList.contains("is-open"));
+    });
+  });
+
   function render() {
     dropZoomInstantly();
     images.forEach(function (img) {
@@ -337,6 +415,7 @@
     captions.forEach(function (cap) {
       var match = cap.dataset.mode === mode && (!STEP_COUNTS[mode] || Number(cap.dataset.i) === galleryIndex);
       cap.classList.toggle("is-active", match);
+      if (!match) setCaptionOpen(cap, false);
     });
     document.querySelectorAll(".nav-link").forEach(function (link) {
       link.classList.toggle("is-active", link.dataset.mode === mode);
